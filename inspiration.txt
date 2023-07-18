@@ -1,4 +1,3 @@
 https://odinbook.com/
-https://socialize-now.vercel.app/
 https://en-gb.facebook.com/
-https://primer.tailwindui.com/#pricing
+https://primer.tailwindui.com/#table-of-contents
