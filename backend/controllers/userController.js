@@ -130,3 +130,75 @@ exports.log_in = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.get_non_friends_user = async (req, res) => {
+  const { user_and_friends_ids } = req.body;
+
+  try {
+    // fetch all non-friends users
+    const users = await User.find({ _id: { $nin: user_and_friends_ids } });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.get_user = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // fetch uer
+    const user = await User.findById(userId);
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.get_friends = async (req, res) => {
+  const { userFriends_ids } = req.body;
+
+  try {
+    // fetch all user friends
+    const userFriends = await User.find({ _id: { $in: userFriends_ids } });
+
+    res.status(200).json(userFriends);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.get_friends_requests = async (req, res) => {
+  const { friends_requests_ids } = req.body;
+
+  try {
+    // fetch all user friends
+    const userFriendsRequests = await User.find({
+      _id: { $in: friends_requests_ids },
+    });
+
+    res.status(200).json(userFriendsRequests);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.add_friend = async (req, res) => {
+  const { user_id, friend_id } = req.body;
+
+  try {
+    // Find the logged in user and update his friends_ids field
+    const user = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $push: { friends_requests_ids: friend_id },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.essage });
+  }
+};

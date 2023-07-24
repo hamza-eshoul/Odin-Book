@@ -93,10 +93,12 @@ const Login = () => {
           </button>
 
           <div className="mt-10 flex flex-col gap-4 w-full items-center">
-            <button className="bg-blue-600 text-white rounded  py-2 text-lg font-semibold hover:bg-blue-500 transition duration-300 w-1/2">
-              {" "}
-              <Link to="/signup">Create a new account</Link>
-            </button>
+            <Link
+              to="/signup"
+              className="bg-blue-600 text-white rounded  py-2 text-lg font-semibold hover:bg-blue-500 transition duration-300 w-1/2 text-center"
+            >
+              Create a new account
+            </Link>
 
             <button className="flex justify-center items-center bg-white gap-2 border-[1px] border-blue-600 text-zinc-700 font-semibold hover:bg-blue-50/60 transition duration-300 rounded py-2 w-1/2">
               {" "}

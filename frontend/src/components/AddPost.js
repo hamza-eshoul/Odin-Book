@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { RiFileAddFill } from "react-icons/ri";
 import { BsThreeDots } from "react-icons/bs";
@@ -52,7 +52,10 @@ const AddPost = ({ setIsAddPostActive }) => {
           />
         </div>
         {/* Profile name */}
-        <h2 className="font-semibold"> Hamza Eshoul</h2>
+        <h2 className="font-semibold">
+          {" "}
+          {user.firstName} {user.lastName}
+        </h2>
       </section>
       {/* Post Content */}
       <textarea

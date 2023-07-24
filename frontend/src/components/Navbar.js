@@ -4,10 +4,12 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { FaHome, FaUserFriends } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
 import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Navbar = ({ setIsAddPostActive }) => {
   const [isNavBarActive, setIsNavbarActive] = useState(true);
   const [isUserMenuActive, setIsUserMenuActive] = useState(false);
+  const { user } = useAuthContext();
 
   const { logout } = useLogout();
   const location = useLocation();
@@ -87,7 +89,7 @@ const Navbar = ({ setIsAddPostActive }) => {
         {/* user popup menu */}
         {isUserMenuActive && (
           <ul className="flex flex-col bg-white border-[0.5px] absolute top-16 w-32 right-2.5 p-1.5 font-medium rounded-md shadow-sm">
-            <Link to="/profile">
+            <Link to={`/profile/${user._id}`}>
               {" "}
               <li className="hover:bg-sky-100 transition duration-300 rounded-md px-2.5 py-1.5 cursor-pointer">
                 {" "}

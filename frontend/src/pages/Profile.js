@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import odinBookLogo from "../images/odin-book.jpeg";
 import { MdMode } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { MdAddCircle } from "react-icons/md";
-import PostCard from "../components/PostCard";
+
+import { useUserContext } from "../hooks/useUserContext";
 
 const Profile = () => {
   const [coverPhoto, setCoverPhoto] = useState("");
+  const { user, dispatch } = useUserContext();
+  const [friends, setFriends] = useState([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const userId = location.pathname.split("/")[2];
+
+    const fetchUserProfile = async () => {
+      const response = await fetch(`http://localhost:4000/user/${userId}`);
+
+      const json = await response.json();
+      dispatch({ type: "SET_USER", payload: json });
+    };
+
+    fetchUserProfile();
+  }, []);
 
   return (
     <section className="pt-16 pb-20">
@@ -40,7 +58,13 @@ const Profile = () => {
 
               {/* profile name */}
               <div className="flex w-[85%] items-center justify-between">
-                <h2 className="text-3xl font-semibold"> Hamza Skynter</h2>
+                {user && (
+                  <h2 className="text-3xl font-semibold">
+                    {" "}
+                    {user.firstName} {user.lastName}{" "}
+                  </h2>
+                )}
+
                 <button className="flex gap-2 items-center font-semibold text-lg bg-zinc-300/50 hover:bg-zinc-300/80 rounded-md px-4 py-1.5">
                   <MdMode className="text-xl" />
                   <span className="pt-0.5">Edit Profile</span>
@@ -50,7 +74,7 @@ const Profile = () => {
             {/* profile tabs */}
             <ul className="flex gap-3 font-medium text-zinc-700 text-lg pt-2.5 border-t-[1px] border-zinc-200">
               <li className="py-2.5 hover:bg-zinc-100/90 rounded">
-                <NavLink to="/profile" className="rounded-t px-2.5 pb-4">
+                <NavLink to="/profile/10" className="rounded-t px-2.5 pb-4">
                   Home
                 </NavLink>
               </li>
@@ -100,6 +124,8 @@ const Profile = () => {
                 See All Friends
               </button>
             </div>
+            {/* {friends.map(())} */}
+
             <h3> No friends yet ...</h3>
           </div>
         </div>

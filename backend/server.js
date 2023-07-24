@@ -31,4 +31,4 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-fakeUser();
+// fakeUser();

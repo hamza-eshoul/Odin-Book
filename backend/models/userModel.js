@@ -19,6 +19,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  friends_requests_ids: {
+    type: Array,
+    required: true,
+  },
+  friends_ids: {
+    type: Array,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

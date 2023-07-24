@@ -37,7 +37,7 @@ const App = () => {
             <Route path="list" element={<FriendsList />} />
           </Route>
 
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>

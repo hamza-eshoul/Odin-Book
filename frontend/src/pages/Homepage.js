@@ -9,7 +9,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import AddPost from "../components/AddPost";
 import Overlay from "../components/Overlay";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePostContext } from "../hooks/usePostContext";
 
 const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
@@ -26,8 +26,6 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
     };
 
     fetchRecentPosts();
-
-    console.log(posts);
   }, []);
 
   return (
@@ -61,7 +59,7 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
 
           {/* User Links */}
           <div className="flex flex-col gap-4 w-full">
-            <Link to="/profile">
+            <Link to={`/profile/${user._id}`}>
               <button className="flex justify-center items-center gap-2 border-[1px] border-blue-300 text-blue-600 hover:bg-blue-50 transition duration-300 hover:border-blue-400 rounded py-1.5 w-full">
                 {" "}
                 <CgProfile className="text-3xl" />
@@ -102,8 +100,9 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
               key={post._id}
               author={post.author}
               content={post.content}
-              likes={post.likes}
+              likes={post.usersLikes}
               date={post.createdAt}
+              post_id={post._id}
             />
           ))}
       </section>

@@ -4,6 +4,7 @@ import { usePostContext } from "./usePostContext";
 export const useAddPost = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+
   const { dispatch } = usePostContext();
 
   const addPost = async (author, content) => {
