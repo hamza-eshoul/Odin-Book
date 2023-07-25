@@ -8,11 +8,13 @@ const FriendsHome = () => {
 
   useEffect(() => {
     const userFriends_ids = user.friends_ids;
-    const userFriendsRequests_ids = user.friends_requests_ids;
+    const userSentRequests = user.sent_friends_requests;
+    const userIncomingRequests = user.incoming_friends_requests;
     const user_id = user._id;
 
     const user_and_friends_ids = userFriends_ids.concat(
-      userFriendsRequests_ids,
+      userSentRequests,
+      userIncomingRequests,
       user_id
     );
 

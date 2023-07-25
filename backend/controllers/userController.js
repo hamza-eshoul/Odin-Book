@@ -170,35 +170,191 @@ exports.get_friends = async (req, res) => {
 };
 
 exports.get_friends_requests = async (req, res) => {
-  const { friends_requests_ids } = req.body;
+  const { sent_friends_requests, incoming_friends_requests } = req.body;
 
   try {
-    // fetch all user friends
-    const userFriendsRequests = await User.find({
-      _id: { $in: friends_requests_ids },
+    // fetch all sent friends requests
+    const sentFriendsRequests = await User.find({
+      _id: { $in: sent_friends_requests },
     });
 
-    res.status(200).json(userFriendsRequests);
+    // fetch all incoming friends requests
+    const incomingFriendsRequests = await User.find({
+      _id: { $in: incoming_friends_requests },
+    });
+    res.status(200).json({ sentFriendsRequests, incomingFriendsRequests });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.add_friend = async (req, res) => {
+exports.add_friend_request = async (req, res) => {
   const { user_id, friend_id } = req.body;
 
   try {
-    // Find the logged in user and update his friends_ids field
+    // Find the logged in user and update his sent friends requests
     const user = await User.findByIdAndUpdate(
       user_id,
       {
-        $push: { friends_requests_ids: friend_id },
+        $push: { sent_friends_requests: friend_id },
       },
       { new: true }
     );
 
+    // Find the added friend and update his incoming friends requests
+    const addedFriend = await User.findByIdAndUpdate(friend_id, {
+      $push: { incoming_friends_requests: user_id },
+    });
+
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ error: error.essage });
+  }
+};
+
+exports.cancel_friend_request = async (req, res) => {
+  const { user_id, friend_id, userSentRequests } = req.body;
+
+  // filter user sent requests array
+  const filterSentRequests = userSentRequests.filter(
+    (request) => request !== friend_id
+  );
+
+  // get friend's incoming requests array
+  const friendIncomingRequests = await User.findById(friend_id, {
+    incoming_friends_requests: 1,
+    _id: 0,
+  });
+
+  // filter friend incoming requests array
+  const filtereIncomingRequests =
+    friendIncomingRequests.incoming_friends_requests.filter(
+      (request) => request !== user_id
+    );
+
+  try {
+    // find user and update his sent_friends_requests field
+    const updateUser = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $set: {
+          sent_friends_requests: filterSentRequests,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    // find friend and update his incoming_friend_requests field
+    const updateFriend = await User.findByIdAndUpdate(
+      friend_id,
+      {
+        $set: {
+          incoming_friends_requests: filtereIncomingRequests,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.accept_friend_request = async (req, res) => {
+  const { user_id, friend_id, userIncomingRequests } = req.body;
+
+  // filter user incoming requests fields
+  const filterIncomingRequests = userIncomingRequests.filter(
+    (request) => request !== friend_id
+  );
+
+  // get friend's sent requests array
+  const friendSentRequests = await User.findById(friend_id, {
+    sent_friends_requests: 1,
+    _id: 0,
+  });
+
+  // filter friend sent request fields
+  const filterSentRequests = friendSentRequests.sent_friends_requests.filter(
+    (request) => request !== user_id
+  );
+
+  try {
+    // find user and update his friends and incoming requests fields
+    const updateUser = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $set: { incoming_friends_requests: filterIncomingRequests },
+        $push: {
+          friends_ids: friend_id,
+        },
+      },
+      { new: true }
+    );
+
+    // find friend and update his friends and sent request felds
+    const updateFriend = await User.findByIdAndUpdate(
+      friend_id,
+      {
+        $set: { sent_friends_requests: filterSentRequests },
+        $push: {
+          friends_ids: user_id,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.reject_friend_request = async (req, res) => {
+  const { user_id, friend_id, userIncomingRequests } = req.body;
+
+  // filter user incoming requests field
+  const filterIncomingRequests = userIncomingRequests.filter(
+    (request) => request !== friend_id
+  );
+
+  // get friend's sent requests array
+  const friendSentRequests = await User.findById(friend_id, {
+    sent_friends_requests: 1,
+    _id: 0,
+  });
+
+  // filter friend sent request fields
+  const filterSentRequests = friendSentRequests.sent_friends_requests.filter(
+    (request) => request !== user_id
+  );
+
+  try {
+    // find user and update his incoming requests field only
+    const updateUser = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $set: {
+          incoming_friends_requests: filterIncomingRequests,
+        },
+      },
+      { new: true }
+    );
+    // find friend and update his sent request field only.
+    const updateFriend = await User.findByIdAndUpdate(
+      friend_id,
+      {
+        $set: {
+          sent_friends_requests: filterSentRequests,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

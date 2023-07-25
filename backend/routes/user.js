@@ -20,7 +20,16 @@ router.post("/friends", userController.get_friends);
 // get friends requests list
 router.post("/friends_requests", userController.get_friends_requests);
 
+// cancel friend request
+router.post("/cancel_friend_request", userController.cancel_friend_request);
+
 // add friend
-router.post("/add_friend", userController.add_friend);
+router.post("/add_friend", userController.add_friend_request);
+
+// accept friend request
+router.post("/accept_request", userController.accept_friend_request);
+
+// reject friend request
+router.post("/reject_request", userController.reject_friend_request);
 
 module.exports = router;

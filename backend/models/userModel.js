@@ -19,7 +19,23 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  friends_requests_ids: {
+  occupation: {
+    type: "String",
+    required: false,
+  },
+  education: {
+    type: "String",
+    required: false,
+  },
+  location: {
+    type: "String",
+    required: false,
+  },
+  sent_friends_requests: {
+    type: Array,
+    required: true,
+  },
+  incoming_friends_requests: {
     type: Array,
     required: true,
   },
