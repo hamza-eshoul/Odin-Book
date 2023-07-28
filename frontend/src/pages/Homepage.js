@@ -1,5 +1,6 @@
 import { FaUserFriends } from "react-icons/fa";
 import odinBookLogo from "../images/odin-book.jpeg";
+import defaultProfile from "../images/defaultProfile.png";
 import { CgProfile } from "react-icons/cg";
 import { MdAddCircle } from "react-icons/md";
 
@@ -9,12 +10,13 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import AddPost from "../components/AddPost";
 import Overlay from "../components/Overlay";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePostContext } from "../hooks/usePostContext";
 
 const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
   const { user } = useAuthContext();
   const { dispatch, posts } = usePostContext();
+  const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
     const fetchRecentPosts = async () => {
@@ -28,8 +30,16 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
     fetchRecentPosts();
   }, []);
 
+  useEffect(() => {
+    if (user.profileImg.url) {
+      setProfileImage(user.profileImg.url);
+    } else {
+      setProfileImage(defaultProfile);
+    }
+  }, [user]);
+
   return (
-    <main className="min-h-screen flex gap-6 w-[75%] mx-auto relative py-24">
+    <main className="min-h-screen flex gap-6 w-[75%] mx-auto py-24">
       {isAddPostActive && (
         // Overlay
         <>
@@ -43,7 +53,7 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
         {/* User Image */}
         <div className="flex justify-center items-center h-36 bg-sky-700/80">
           <div className="h-24 w-24">
-            <img src={odinBookLogo} className="h-full w-full rounded-full" />
+            <img src={profileImage} className="h-full w-full rounded-full" />
           </div>
         </div>
 
@@ -54,23 +64,24 @@ const Homepage = ({ isAddPostActive, setIsAddPostActive }) => {
               {" "}
               {user.firstName} {user.lastName}{" "}
             </h3>
-            <p> 0 friends</p>
+            <p> {user.friends_ids.length} friends</p>
           </div>
 
           {/* User Links */}
           <div className="flex flex-col gap-4 w-full">
-            <Link to={`/profile/${user._id}`}>
+            <Link to={`/profile/${user._id}/`}>
               <button className="flex justify-center items-center gap-2 border-[1px] border-blue-300 text-blue-600 hover:bg-blue-50 transition duration-300 hover:border-blue-400 rounded py-1.5 w-full">
                 {" "}
                 <CgProfile className="text-3xl" />
                 <span className="text-xl"> View Profile </span>
               </button>
             </Link>
-            <button className="flex justify-center items-center gap-2 border-[1px] border-blue-300 text-blue-600 hover:bg-blue-50 transition duration-300 hover:border-blue-400 rounded py-1.5">
-              {" "}
-              <FaUserFriends className="text-3xl" />
-              <span className="text-xl">Friends </span>
-            </button>
+            <Link to="/friends/" className="text-xl">
+              <button className="flex justify-center items-center gap-2 border-[1px] border-blue-300 text-blue-600 hover:bg-blue-50 transition duration-300 hover:border-blue-400 rounded py-1.5 w-full">
+                {" "}
+                <FaUserFriends className="text-3xl" /> Friends
+              </button>
+            </Link>
           </div>
         </div>
       </section>

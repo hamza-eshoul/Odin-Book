@@ -1,6 +1,7 @@
 const validator = require("validator");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/userModel");
+const cloudinary = require("../cloudinary");
 
 exports.sign_up = async (req, res) => {
   // signup logic
@@ -162,6 +163,21 @@ exports.get_friends = async (req, res) => {
   try {
     // fetch all user friends
     const userFriends = await User.find({ _id: { $in: userFriends_ids } });
+
+    res.status(200).json(userFriends);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.get_limited_friends = async (req, res) => {
+  const { userFriends_ids } = req.body;
+
+  try {
+    // fetch user limited friends
+    const userFriends = await User.find({
+      _id: { $in: userFriends_ids },
+    }).limit(9);
 
     res.status(200).json(userFriends);
   } catch (error) {
@@ -354,6 +370,126 @@ exports.reject_friend_request = async (req, res) => {
     );
 
     res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.remove_friend = async (req, res) => {
+  const { user_id, friend_id, user_friends_ids, friend_friends_ids } = req.body;
+
+  // filter user_friends ids
+  const filterUserIds = user_friends_ids.filter(
+    (friend) => friend !== friend_id
+  );
+
+  // filter friend_friends ids
+  const filterFriendIds = friend_friends_ids.filter(
+    (friend) => friend !== user_id
+  );
+
+  try {
+    // find user and update his friends_ids
+    const updateUser = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $set: { friends_ids: filterUserIds },
+      },
+      { new: true }
+    );
+
+    // findfriend and update his friends_ids
+    const updateFriend = await User.findByIdAndUpdate(
+      friend_id,
+      {
+        $set: { friends_ids: filterFriendIds },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.update_user_info = async (req, res) => {
+  const {
+    user_id,
+    firstName,
+    lastName,
+    email,
+    occupation,
+    education,
+    location,
+  } = req.body;
+
+  try {
+    // find user and update his info
+    const updateUserInfo = await User.findByIdAndUpdate(
+      user_id,
+      {
+        $set: {
+          firstName,
+          lastName,
+          email,
+          occupation,
+          education,
+          location,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updateUserInfo);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.update_user_image = async (req, res) => {
+  const { user_id, imageUrl } = req.body;
+
+  try {
+    if (!imageUrl) {
+      // find user and set his profile image to an empty array
+      const emptyUserImage = await User.findByIdAndUpdate(
+        user_id,
+        {
+          $set: {
+            profileImg: {
+              public_id: "",
+              url: "",
+            },
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json(emptyUserImage);
+    }
+    else {
+   const result = await cloudinary.uploader.upload(imageUrl, {
+     folder: "profile_images",
+   });
+
+   // find user and update his profileImage field
+   const updateUserImg = await User.findByIdAndUpdate(
+     user_id,
+     {
+       $set: {
+         profileImg: {
+           public_id: result.public_id,
+           url: result.secure_url,
+         },
+       },
+     },
+     { new: true }
+   );
+   res.status(200).json(updateUserImg);
+    }
+
+ 
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

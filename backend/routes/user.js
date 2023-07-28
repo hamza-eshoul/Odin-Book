@@ -17,6 +17,9 @@ router.get("/:userId", userController.get_user);
 // get friends list
 router.post("/friends", userController.get_friends);
 
+// get limited friends list
+router.post("/limited_friends", userController.get_limited_friends);
+
 // get friends requests list
 router.post("/friends_requests", userController.get_friends_requests);
 
@@ -31,5 +34,13 @@ router.post("/accept_request", userController.accept_friend_request);
 
 // reject friend request
 router.post("/reject_request", userController.reject_friend_request);
+
+// remove friend
+router.put("/unfriend", userController.remove_friend);
+
+// update user profile info
+router.put("/user_info", userController.update_user_info);
+
+router.put("/update_image", userController.update_user_image);
 
 module.exports = router;

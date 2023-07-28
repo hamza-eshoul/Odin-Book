@@ -10,6 +10,8 @@ import FriendsRequests from "./components/FriendsRequests";
 import FriendsList from "./components/FriendsList";
 
 import FriendsHome from "./components/FriendsHome";
+import ProfileFriends from "./components/ProfileFriends";
+import ProfileHome from "./components/ProfileHome";
 
 const App = () => {
   const [isAddPostActive, setIsAddPostActive] = useState(false);
@@ -37,7 +39,18 @@ const App = () => {
             <Route path="list" element={<FriendsList />} />
           </Route>
 
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />}>
+            <Route
+              index
+              element={
+                <ProfileHome
+                  isAddPostActive={isAddPostActive}
+                  setIsAddPostActive={setIsAddPostActive}
+                />
+              }
+            />
+            <Route path="friends" element={<ProfileFriends />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

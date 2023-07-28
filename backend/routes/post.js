@@ -11,6 +11,9 @@ router.get("/recent_posts", postController.get_recent_posts);
 // get individual post
 router.get("/:post_id", postController.get_post);
 
+// get profile page user posts
+router.get("/user_posts/:user_name", postController.get_user_posts);
+
 // create comment
 router.post("/create_comment", postController.create_comment);
 

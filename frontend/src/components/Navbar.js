@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import odinBookLogo from "../images/odin-book.jpeg";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import defaultProfile from "../images/defaultProfile.png";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaUserFriends } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
 import { useLogout } from "../hooks/useLogout";
@@ -9,10 +10,23 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const Navbar = ({ setIsAddPostActive }) => {
   const [isNavBarActive, setIsNavbarActive] = useState(true);
   const [isUserMenuActive, setIsUserMenuActive] = useState(false);
+  const [navbarProfileImg, setNavbarProfileImg] = useState("");
   const { user } = useAuthContext();
+  const navigate = useNavigate();
 
   const { logout } = useLogout();
   const location = useLocation();
+
+  const dynamicallyNavigateToProfile = () => {
+    const path = location.pathname.split("/")[1];
+
+    if (path === "homepage") {
+      navigate(`/profile/${user._id}/`);
+    } else if (path === "profile") {
+      navigate(`/profile/${user._id}/`);
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
     if (location.pathname === "/login" || location.pathname === "/signup") {
@@ -21,6 +35,14 @@ const Navbar = ({ setIsAddPostActive }) => {
       setIsNavbarActive(true);
     }
   }, [location]);
+
+  useEffect(() => {
+    if (user.profileImg.url) {
+      setNavbarProfileImg(user.profileImg.url);
+    } else {
+      setNavbarProfileImg(defaultProfile);
+    }
+  }, [user]);
 
   return (
     <nav
@@ -82,21 +104,23 @@ const Navbar = ({ setIsAddPostActive }) => {
         onClick={() => setIsUserMenuActive(!isUserMenuActive)}
       >
         <img
-          src={odinBookLogo}
+          src={navbarProfileImg}
           alt="odin book logo"
           className="h-full w-full rounded-full cursor-pointer"
         />
         {/* user popup menu */}
         {isUserMenuActive && (
           <ul className="flex flex-col bg-white border-[0.5px] absolute top-16 w-32 right-2.5 p-1.5 font-medium rounded-md shadow-sm">
-            <Link to={`/profile/${user._id}`}>
+            {" "}
+            <li
+              className="hover:bg-sky-100 transition duration-300 rounded-md px-2.5 py-1.5 cursor-pointer"
+              onClick={() => {
+                dynamicallyNavigateToProfile();
+              }}
+            >
               {" "}
-              <li className="hover:bg-sky-100 transition duration-300 rounded-md px-2.5 py-1.5 cursor-pointer">
-                {" "}
-                View Profile
-              </li>
-            </Link>
-
+              View Profile
+            </li>
             <li className="hover:bg-sky-100 transition duration-300 rounded-md px-2.5 py-1.5 cursor-pointer">
               {" "}
               Settings

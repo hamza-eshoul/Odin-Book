@@ -26,7 +26,7 @@ const AddPost = ({ setIsAddPostActive }) => {
 
   return (
     <form
-      className="flex flex-col w-[500px] rounded-lg absolute top-[200px] left-[400px] z-20 bg-white shadow-lg p-4 gap-4"
+      className="flex flex-col w-[500px] rounded-lg absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20 bg-white shadow-lg p-4 gap-4"
       onSubmit={handleSubmit}
     >
       {/* Add Post Header */}

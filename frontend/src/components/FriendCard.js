@@ -123,16 +123,19 @@ const FriendCard = ({ firstName, lastName, friend_id, friendStatus }) => {
       />
 
       {/* Name */}
-      <h2 className="font-semibold text-lg px-2 pt-2 text-center">
+      <Link
+        to={`/profile/${friend_id}/`}
+        className="font-semibold text-lg px-2 pt-2 text-center hover:underline"
+      >
         {" "}
         {firstName} {lastName}
-      </h2>
+      </Link>
 
       {/* Add Friend Button */}
       {friendStatus === "Friend" ? (
         <Link
           className="text-blue-600 bg-blue-100/50 hover:bg-blue-100 py-2 mx-3 rounded-lg my-4 text-center"
-          to={`/profile/${friend_id}`}
+          to={`/profile/${friend_id}/`}
         >
           View Profile
         </Link>

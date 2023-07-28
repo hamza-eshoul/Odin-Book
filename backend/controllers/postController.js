@@ -40,6 +40,21 @@ module.exports.get_post = async (req, res) => {
   res.status(200).json(post);
 };
 
+module.exports.get_user_posts = async (req, res) => {
+  const { user_name } = req.params;
+
+  try {
+    // find user posts
+    const userPosts = await Post.find({ author: user_name }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(userPosts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports.create_comment = async (req, res) => {
   // desctrure the body of the request
   const { author, content, post_id } = req.body;
