@@ -1,17 +1,18 @@
 import { MdAddCircle } from "react-icons/md";
 import AboutProfile from "../components/AboutProfile";
 import FriendSmallCard from "../components/FriendSmallCard";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useOutletContext } from "react-router-dom";
 import PostCard from "./PostCard";
 import Overlay from "./Overlay";
 import AddPost from "./AddPost";
 import { usePostContext } from "../hooks/usePostContext";
 import EditProfile from "./EditProfile";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { MoonLoader } from "react-spinners";
 
 const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
   const [friends, setFriends] = useState([]);
+  const [friendsLoading, setFriendsLoading] = useState(null);
   const { currentUser, isEditProfileActive, setIsEditProfileActive } =
     useOutletContext();
   const { posts, dispatch } = usePostContext();
@@ -19,6 +20,7 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
 
   useEffect(() => {
     const fetchUserFriends = async () => {
+      setFriendsLoading(true);
       const userFriends_ids = currentUser.friends_ids;
 
       const response = await fetch(
@@ -36,6 +38,7 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
 
       if (response.ok) {
         setFriends(json);
+        setFriendsLoading(null);
       }
     };
 
@@ -46,12 +49,11 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
 
   useEffect(() => {
     if (currentUser) {
-      const currentUserName =
-        currentUser.firstName + " " + currentUser.lastName;
+      const currentUser_id = currentUser._id;
 
       const fetchUserPosts = async () => {
         const response = await fetch(
-          `http://localhost:4000/post/user_posts/${currentUserName}`
+          `http://localhost:4000/post/user_posts/${currentUser_id}`
         );
 
         const json = await response.json();
@@ -61,7 +63,7 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
 
       fetchUserPosts();
     }
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
 
   return (
     <main className="w-[65%] mx-auto flex gap-8">
@@ -99,24 +101,40 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
             </Link>
           </div>
 
-          {friends.length !== 0 ? (
-            <div className="flex flex-wrap gap-3">
-              {friends.map((friend) => (
-                <FriendSmallCard
-                  key={friend._id}
-                  firstName={friend.firstName}
-                  lastName={friend.lastName}
-                  friend_id={friend._id}
-                />
-              ))}
+          {friendsLoading ? (
+            <div className="flex justify-center items-center">
+              <MoonLoader
+                color={"#3c82f6"}
+                loading={friendsLoading}
+                size={40}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
             </div>
           ) : (
-            <div>
-              <h1 className="text-lg"> {friends.length} friends </h1>
-              {friends.map((friend) => (
-                <div>{friend}</div>
-              ))}
-            </div>
+            <>
+              {" "}
+              {friends.length !== 0 ? (
+                <div className="flex flex-wrap gap-3">
+                  {friends.map((friend) => (
+                    <FriendSmallCard
+                      key={friend._id}
+                      firstName={friend.firstName}
+                      lastName={friend.lastName}
+                      profileImg={friend.profileImg.url}
+                      friend_id={friend._id}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  <h1 className="text-lg"> {friends.length} friends </h1>
+                  {friends.map((friend) => (
+                    <div>{friend}</div>
+                  ))}
+                </div>
+              )}{" "}
+            </>
           )}
         </div>
       </div>
@@ -128,7 +146,7 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
           <h3 className="text-3xl font-bold"> Posts </h3>
         </div>
         {/* Create Post */}
-        {location.pathname.split("/")[2] ==
+        {location.pathname.split("/")[2] ===
         JSON.parse(localStorage.getItem("user"))._id ? (
           <div
             className="flex items-center gap-4 pl-6 bg-white rounded-md py-2 hover:bg-sky-100 transition duration-300 cursor-pointer"
@@ -150,7 +168,7 @@ const ProfileHome = ({ isAddPostActive, setIsAddPostActive }) => {
         )}
 
         {/* Posts */}
-        {posts === null || posts.length == 0 ? (
+        {posts === null || posts.length === 0 ? (
           <div className="flex justify-center gap-4 p-4 bg-white rounded-md  ">
             <h3 className="text-xl font-medium ">
               {" "}

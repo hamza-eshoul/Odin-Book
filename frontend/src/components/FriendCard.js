@@ -4,7 +4,14 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { MoonLoader } from "react-spinners";
 
-const FriendCard = ({ firstName, lastName, friend_id, friendStatus }) => {
+const FriendCard = ({
+  firstName,
+  lastName,
+  friend_id,
+  friendStatus,
+  userImage,
+  cardStatus,
+}) => {
   const { user, dispatch } = useAuthContext();
 
   // Sent Requests state
@@ -114,128 +121,144 @@ const FriendCard = ({ firstName, lastName, friend_id, friendStatus }) => {
   };
 
   return (
-    <div className="flex flex-col w-[218px] shadow-lg rounded-xl border-[0.5px] border-zinc-200 bg-white">
+    <div className="flex flex-col items-center w-[218px] shadow-lg rounded-xl border-[0.5px] border-zinc-200 bg-white">
       {/* image */}
-      <img
-        src={defaultProfile}
-        alt="Profile Image"
-        className="w-full rounded-t-lg"
-      />
+      {cardStatus === "loading" ? (
+        <div className="bg-slate-200 animate-pulse rounded-full w-36 h-36 mt-6 mb-8" />
+      ) : (
+        <img
+          src={userImage ? userImage : defaultProfile}
+          alt="Profile"
+          className="w-full h-[240px] object-fit rounded-t-lg"
+        />
+      )}
 
       {/* Name */}
-      <Link
-        to={`/profile/${friend_id}/`}
-        className="font-semibold text-lg px-2 pt-2 text-center hover:underline"
-      >
-        {" "}
-        {firstName} {lastName}
-      </Link>
+
+      {cardStatus === "loading" ? (
+        <div className="w-4/5 animate-pulse h-3.5 rounded bg-zinc-200 my-5" />
+      ) : (
+        <Link
+          to={`/profile/${friend_id}/`}
+          className="font-semibold text-lg px-2 pt-2 text-center hover:underline"
+        >
+          {" "}
+          {firstName} {lastName}
+        </Link>
+      )}
 
       {/* Add Friend Button */}
-      {friendStatus === "Friend" ? (
-        <Link
-          className="text-blue-600 bg-blue-100/50 hover:bg-blue-100 py-2 mx-3 rounded-lg my-4 text-center"
-          to={`/profile/${friend_id}/`}
-        >
-          View Profile
-        </Link>
-      ) : friendStatus === "Sent_Request" ? (
-        <button
-          className={`${
-            isRequestCanceled
-              ? "bg-zinc-200 text-zinc-400 pointer-events-none"
-              : "text-blue-600 bg-blue-100/50 hover:bg-blue-100"
-          } py-2 mx-3 rounded-lg my-4`}
-          onClick={() => {
-            cancelFriendRequest();
-          }}
-        >
-          {isCancelRequestLoading ? (
-            <div className="flex justify-center items-center">
-              <MoonLoader
-                color={"#3c82f6"}
-                loading={isCancelRequestLoading}
-                size={30}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            </div>
-          ) : isRequestCanceled ? (
-            "Request Canceled!"
-          ) : (
-            "Cancel"
-          )}
-        </button>
-      ) : friendStatus === "Incoming_Request" ? (
-        <div className="flex gap-4 justify-center">
-          {isProcessRequestLoading ? (
-            <MoonLoader
-              color={"#3c82f6"}
-              loading={isProcessRequestLoading}
-              size={30}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-              className="m-4"
-            />
-          ) : (
-            <>
-              {isRequestProcessed ? (
-                <button className="bg-zinc-200 text-zinc-400 pointer-events-none py-2 px-3 rounded-lg my-4">
-                  Request Procecced!
-                </button>
+
+      {cardStatus === "loading" ? (
+        <div className="w-4/5 animate-pulse h-3.5 rounded bg-zinc-200 mb-10" />
+      ) : (
+        <>
+          {friendStatus === "Friend" ? (
+            <Link
+              className="text-blue-600 bg-blue-100/50 hover:bg-blue-100  rounded-lg w-[80%] py-2 px-2.5 m-3 text-center"
+              to={`/profile/${friend_id}/`}
+            >
+              View Profile
+            </Link>
+          ) : friendStatus === "Sent_Request" ? (
+            <button
+              className={`${
+                isRequestCanceled
+                  ? "bg-zinc-200 text-zinc-400 pointer-events-none"
+                  : "text-blue-600 bg-blue-100/50 hover:bg-blue-100"
+              } rounded-lg w-[80%] py-2 px-2.5 m-3`}
+              onClick={() => {
+                cancelFriendRequest();
+              }}
+            >
+              {isCancelRequestLoading ? (
+                <div className="flex justify-center items-center">
+                  <MoonLoader
+                    color={"#3c82f6"}
+                    loading={isCancelRequestLoading}
+                    size={30}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                </div>
+              ) : isRequestCanceled ? (
+                "Request Canceled!"
+              ) : (
+                "Cancel"
+              )}
+            </button>
+          ) : friendStatus === "Incoming_Request" ? (
+            <div className="flex gap-4 justify-center">
+              {isProcessRequestLoading ? (
+                <MoonLoader
+                  color={"#3c82f6"}
+                  loading={isProcessRequestLoading}
+                  size={30}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                  className="m-4"
+                />
               ) : (
                 <>
-                  {" "}
-                  <button
-                    className="text-blue-600 bg-blue-100/50 hover:bg-blue-100 py-2 px-3 rounded-lg my-4"
-                    onClick={() => {
-                      acceptFriendRequest();
-                    }}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="text-red-500 bg-zinc-100 hover:bg-zinc-200 py-2 px-3 rounded-lg my-4"
-                    onClick={() => {
-                      rejectFriendRequest();
-                    }}
-                  >
-                    Reject
-                  </button>{" "}
+                  {isRequestProcessed ? (
+                    <button className="bg-zinc-200 text-zinc-400 pointer-events-none rounded-lg py-2 px-2.5 m-3">
+                      Request Procecced!
+                    </button>
+                  ) : (
+                    <>
+                      {" "}
+                      <button
+                        className="text-blue-600 bg-blue-100/50 hover:bg-blue-100 rounded-lg  py-2.5 px-3 m-3"
+                        onClick={() => {
+                          acceptFriendRequest();
+                        }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="text-red-500 bg-zinc-100 hover:bg-zinc-200 rounded-lg  py-2.5 px-3 m-3"
+                        onClick={() => {
+                          rejectFriendRequest();
+                        }}
+                      >
+                        Reject
+                      </button>{" "}
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
-        </div>
-      ) : friendStatus === "Non_Friend" ? (
-        <button
-          className={`${
-            isRequestSent
-              ? "bg-zinc-200 text-zinc-400 pointer-events-none"
-              : "text-blue-600 bg-blue-100/50 hover:bg-blue-100"
-          }  py-2 mx-3 rounded-lg my-4`}
-          onClick={() => {
-            addFriendRequest();
-          }}
-        >
-          {isLoading ? (
-            <div className="flex justify-center items-center">
-              <MoonLoader
-                color={"#3c82f6"}
-                loading={isLoading}
-                size={30}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
             </div>
-          ) : isRequestSent ? (
-            "Request sent!"
+          ) : friendStatus === "Non_Friend" ? (
+            <button
+              className={`${
+                isRequestSent
+                  ? "bg-zinc-200 text-zinc-400 pointer-events-none"
+                  : "text-blue-600 bg-blue-100/50 hover:bg-blue-100"
+              }  rounded-lg w-[80%] py-2 px-2.5 m-3`}
+              onClick={() => {
+                addFriendRequest();
+              }}
+            >
+              {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <MoonLoader
+                    color={"#3c82f6"}
+                    loading={isLoading}
+                    size={30}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                </div>
+              ) : isRequestSent ? (
+                "Request sent!"
+              ) : (
+                "Add Friend"
+              )}
+            </button>
           ) : (
-            "Add Friend"
+            ""
           )}
-        </button>
-      ) : (
-        ""
+        </>
       )}
     </div>
   );

@@ -14,11 +14,21 @@ const userSchema = new Schema(
     profileImg: {
       public_id: {
         type: String,
-        required: false,
+        default: "",
       },
       url: {
         type: String,
-        required: false,
+        default: "",
+      },
+    },
+    coverImg: {
+      public_id: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
       },
     },
     email: {

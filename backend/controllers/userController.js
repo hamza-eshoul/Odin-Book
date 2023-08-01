@@ -2,6 +2,11 @@ const validator = require("validator");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/userModel");
 const cloudinary = require("../cloudinary");
+const jwt = require("jsonwebtoken");
+
+const createToken = (_id) => {
+  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+};
 
 exports.sign_up = async (req, res) => {
   // signup logic
@@ -82,8 +87,11 @@ exports.sign_up = async (req, res) => {
       confirmPassword
     );
 
+    // create a token
+    const token = createToken(user._id);
+
     // send user info as json
-    res.status(200).json({ ...user._doc, password: null });
+    res.status(200).json({ ...user._doc, password: null, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -125,8 +133,11 @@ exports.log_in = async (req, res) => {
     // run the login logic and log the user in if the logic succeeds
     const user = await login(email, password);
 
+    // create a token
+    const token = createToken(user._id);
+
     // send user info as json
-    res.status(200).json({ ...user._doc, password: null });
+    res.status(200).json({ ...user._doc, password: null, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -467,29 +478,71 @@ exports.update_user_image = async (req, res) => {
       );
 
       res.status(200).json(emptyUserImage);
-    }
-    else {
-   const result = await cloudinary.uploader.upload(imageUrl, {
-     folder: "profile_images",
-   });
+    } else {
+      const result = await cloudinary.uploader.upload(imageUrl, {
+        folder: "profile_images",
+      });
 
-   // find user and update his profileImage field
-   const updateUserImg = await User.findByIdAndUpdate(
-     user_id,
-     {
-       $set: {
-         profileImg: {
-           public_id: result.public_id,
-           url: result.secure_url,
-         },
-       },
-     },
-     { new: true }
-   );
-   res.status(200).json(updateUserImg);
+      // find user and update his profileImage field
+      const updateUserImg = await User.findByIdAndUpdate(
+        user_id,
+        {
+          $set: {
+            profileImg: {
+              public_id: result.public_id,
+              url: result.secure_url,
+            },
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(updateUserImg);
     }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
- 
+exports.update_user_cover_image = async (req, res) => {
+  const { user_id, imageUrl } = req.body;
+
+  try {
+    if (!imageUrl) {
+      // find user and set his cover image to an empty array
+      const emtpyCoverImage = await User.findByIdAndUpdate(
+        user_id,
+        {
+          $set: {
+            coverImg: {
+              public_id: "",
+              url: "",
+            },
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json(emtpyCoverImage);
+    } else {
+      const result = await cloudinary.uploader.upload(imageUrl, {
+        folder: "profile_cover_images",
+      });
+
+      // find user and update his coverImage field
+      const updateUserImg = await User.findByIdAndUpdate(
+        user_id,
+        {
+          $set: {
+            coverImg: {
+              public_id: result.public_id,
+              url: result.secure_url,
+            },
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(updateUserImg);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

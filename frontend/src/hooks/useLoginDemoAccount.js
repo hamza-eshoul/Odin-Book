@@ -2,57 +2,47 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "./useAuthContext";
 
-export const useSignup = () => {
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+export const useLoginDemoAccount = () => {
+  const [demoError, setDemoError] = useState(null);
+  const [isDemoLoading, setIsDemoLoading] = useState(null);
   const { dispatch } = useAuthContext();
   const navigate = useNavigate();
 
-  const signup = async (
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword
-  ) => {
-    setIsLoading(true);
-    setError(null);
+  const loginDemoAccount = async () => {
+    setIsDemoLoading(true);
+    setDemoError(null);
 
-    const response = await fetch("http://localhost:4000/user/signup", {
+    const response = await fetch("http://localhost:4000/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
+        email: "hamza.eshoul.pro@gmail.com",
+        password: "Hamzahamza1",
       }),
     });
 
     const json = await response.json();
 
     if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error);
-      console.log(json);
+      setIsDemoLoading(false);
+      setDemoError(json.error);
     }
-    if (response.ok) {
-      setIsLoading(false);
 
-      // save the user to local storage
+    if (response.ok) {
+      setIsDemoLoading(false);
+
+      // save the user to localstorage
       localStorage.setItem("user", JSON.stringify(json));
 
       // update the auth context
       dispatch({ type: "LOGIN", payload: json });
 
       // navigate to homepage
-
       navigate("/homepage");
     }
   };
 
-  return { signup, isLoading, error };
+  return { loginDemoAccount, demoError, isDemoLoading };
 };

@@ -5,6 +5,7 @@ import FriendCard from "./FriendCard";
 const FriendsRequests = () => {
   const [sentFriendsRequests, setSentFriendsRequests] = useState([]);
   const [incomingFriendsRequests, setIncomingFriendsRequests] = useState([]);
+  const [cardStatus, setCardStatus] = useState("");
 
   const { user } = useAuthContext();
 
@@ -13,6 +14,9 @@ const FriendsRequests = () => {
     const incoming_friends_requests = user.incoming_friends_requests;
 
     const fetchUserFriendRequests = async () => {
+      setSentFriendsRequests([" ", " ", " "]);
+      setIncomingFriendsRequests([" ", " ", " "]);
+      setCardStatus("loading");
       const response = await fetch(
         "http://localhost:4000/user/friends_requests",
         {
@@ -32,6 +36,7 @@ const FriendsRequests = () => {
       if (response.ok) {
         setSentFriendsRequests(json.sentFriendsRequests);
         setIncomingFriendsRequests(json.incomingFriendsRequests);
+        setCardStatus("");
       }
     };
 
@@ -45,18 +50,33 @@ const FriendsRequests = () => {
         <h1 className="text-2xl font-semibold pb-4">Incoming Requests</h1>
 
         <div className="flex gap-5 flex-wrap ml-20">
-          {incomingFriendsRequests.length !== 0 ? (
-            incomingFriendsRequests.map((friendRequest) => (
-              <FriendCard
-                key={friendRequest._id}
-                firstName={friendRequest.firstName}
-                lastName={friendRequest.lastName}
-                friend_id={friendRequest._id}
-                friendStatus="Incoming_Request"
-              />
-            ))
+          {cardStatus == "loading" ? (
+            <>
+              {" "}
+              {incomingFriendsRequests.map((request) => (
+                <FriendCard key={request._id} cardStatus="loading" />
+              ))}{" "}
+            </>
           ) : (
-            <h3 className="text-xl"> No requests yet</h3>
+            <>
+              {incomingFriendsRequests.length !== 0 ? (
+                <>
+                  {" "}
+                  {incomingFriendsRequests.map((request) => (
+                    <FriendCard
+                      key={request._id}
+                      firstName={request.firstName}
+                      lastName={request.lastName}
+                      friend_id={request._id}
+                      userImage={request.profileImg.url}
+                      friendStatus="Incoming_Request"
+                    />
+                  ))}{" "}
+                </>
+              ) : (
+                <h3 className="text-xl"> No requests yet</h3>
+              )}{" "}
+            </>
           )}
         </div>
       </div>
@@ -66,18 +86,33 @@ const FriendsRequests = () => {
         <h1 className="text-2xl font-semibold pb-4">Sent Requests</h1>
 
         <div className="flex gap-5 flex-wrap ml-20">
-          {sentFriendsRequests.length !== 0 ? (
-            sentFriendsRequests.map((friendRequest) => (
-              <FriendCard
-                key={friendRequest._id}
-                firstName={friendRequest.firstName}
-                lastName={friendRequest.lastName}
-                friend_id={friendRequest._id}
-                friendStatus="Sent_Request"
-              />
-            ))
+          {cardStatus == "loading" ? (
+            <>
+              {" "}
+              {sentFriendsRequests.map((request) => (
+                <FriendCard key={request._id} cardStatus="loading" />
+              ))}{" "}
+            </>
           ) : (
-            <h3 className="text-xl"> No requests yet</h3>
+            <>
+              {sentFriendsRequests.length !== 0 ? (
+                <>
+                  {" "}
+                  {sentFriendsRequests.map((request) => (
+                    <FriendCard
+                      key={request._id}
+                      firstName={request.firstName}
+                      lastName={request.lastName}
+                      friend_id={request._id}
+                      userImage={request.profileImg.url}
+                      friendStatus="Sent_Request"
+                    />
+                  ))}{" "}
+                </>
+              ) : (
+                <h3 className="text-xl"> No requests yet</h3>
+              )}{" "}
+            </>
           )}
         </div>
       </div>

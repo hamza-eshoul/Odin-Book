@@ -10,7 +10,6 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const Navbar = ({ setIsAddPostActive }) => {
   const [isNavBarActive, setIsNavbarActive] = useState(true);
   const [isUserMenuActive, setIsUserMenuActive] = useState(false);
-  const [navbarProfileImg, setNavbarProfileImg] = useState("");
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
@@ -20,11 +19,11 @@ const Navbar = ({ setIsAddPostActive }) => {
   const dynamicallyNavigateToProfile = () => {
     const path = location.pathname.split("/")[1];
 
-    if (path === "homepage") {
-      navigate(`/profile/${user._id}/`);
-    } else if (path === "profile") {
+    if (path === "profile") {
       navigate(`/profile/${user._id}/`);
       window.location.reload();
+    } else {
+      navigate(`/profile/${user._id}/`);
     }
   };
 
@@ -35,14 +34,6 @@ const Navbar = ({ setIsAddPostActive }) => {
       setIsNavbarActive(true);
     }
   }, [location]);
-
-  useEffect(() => {
-    if (user.profileImg.url) {
-      setNavbarProfileImg(user.profileImg.url);
-    } else {
-      setNavbarProfileImg(defaultProfile);
-    }
-  }, [user]);
 
   return (
     <nav
@@ -103,11 +94,14 @@ const Navbar = ({ setIsAddPostActive }) => {
         className="h-12 w-12 object-fit relative"
         onClick={() => setIsUserMenuActive(!isUserMenuActive)}
       >
-        <img
-          src={navbarProfileImg}
-          alt="odin book logo"
-          className="h-full w-full rounded-full cursor-pointer"
-        />
+        {user && (
+          <img
+            src={user.profileImg.url ? user.profileImg.url : defaultProfile}
+            alt="User Image"
+            className="h-full w-full rounded-full cursor-pointer"
+          />
+        )}
+
         {/* user popup menu */}
         {isUserMenuActive && (
           <ul className="flex flex-col bg-white border-[0.5px] absolute top-16 w-32 right-2.5 p-1.5 font-medium rounded-md shadow-sm">

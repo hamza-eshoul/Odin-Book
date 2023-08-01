@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import odinBookLogo from "../images/odin-book.jpeg";
 import { FcLike } from "react-icons/fc";
 import { format } from "date-fns";
+import defaultProfile from "../images/defaultProfile.png";
 
 const CommentCard = ({ author, content, likes, date }) => {
   const [formattedCommentDate, setFormattedCommentDate] = useState("");
@@ -19,7 +19,7 @@ const CommentCard = ({ author, content, likes, date }) => {
       {/* Author Image */}
       <div className="h-10 w-10 mb-4">
         <img
-          src={odinBookLogo}
+          src={author.profileImg.url ? author.profileImg.url : defaultProfile}
           className="h-full w-full rounded-full object-fit"
         />
       </div>
@@ -30,7 +30,9 @@ const CommentCard = ({ author, content, likes, date }) => {
         {" "}
         <div className="bg-zinc-100/60 flex flex-col gap-1 rounded px-3 py-2">
           <div className="flex gap-6">
-            <h1 className="font-semibold">{author}</h1>
+            <h1 className="font-semibold">
+              {author.firstName} {author.lastName}
+            </h1>
             <p className="text-sm text-black/60">{formattedCommentDate} </p>
           </div>
 

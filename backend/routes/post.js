@@ -6,13 +6,13 @@ const postController = require("../controllers/postController");
 router.post("/create", postController.create_post);
 
 // get 10 recent posts
-router.get("/recent_posts", postController.get_recent_posts);
+router.post("/recent_posts", postController.fetch_recent_posts);
 
 // get individual post
 router.get("/:post_id", postController.get_post);
 
 // get profile page user posts
-router.get("/user_posts/:user_name", postController.get_user_posts);
+router.get("/user_posts/:user_id", postController.get_user_posts);
 
 // create comment
 router.post("/create_comment", postController.create_comment);

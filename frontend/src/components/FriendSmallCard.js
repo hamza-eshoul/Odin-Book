@@ -2,7 +2,7 @@ import React from "react";
 import defaultProfile from "../images/defaultProfile.png";
 import { useNavigate } from "react-router-dom";
 
-const FriendSmallCard = ({ friend_id, firstName, lastName }) => {
+const FriendSmallCard = ({ friend_id, firstName, lastName, profileImg }) => {
   const navigate = useNavigate();
   const navigateToFriendProfile = () => {
     navigate(`/profile/${friend_id}/`);
@@ -18,7 +18,7 @@ const FriendSmallCard = ({ friend_id, firstName, lastName }) => {
         }}
       >
         <img
-          src={defaultProfile}
+          src={profileImg ? profileImg : defaultProfile}
           className="h-full w-full object-cover rounded-lg"
         />
       </div>

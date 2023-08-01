@@ -41,6 +41,10 @@ router.put("/unfriend", userController.remove_friend);
 // update user profile info
 router.put("/user_info", userController.update_user_info);
 
+// update user profile image
 router.put("/update_image", userController.update_user_image);
+
+// update user cover image
+router.put("/update_cover_image", userController.update_user_cover_image);
 
 module.exports = router;

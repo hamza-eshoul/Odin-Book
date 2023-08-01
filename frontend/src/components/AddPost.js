@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import defaultProfile from "../images/defaultProfile.png";
 import { RxCross1 } from "react-icons/rx";
 import { RiFileAddFill } from "react-icons/ri";
 import { BsThreeDots } from "react-icons/bs";
 import { FcStackOfPhotos } from "react-icons/fc";
-import odinBookLogo from "../images/odin-book.jpeg";
 import { useAddPost } from "../hooks/useAddPost";
 import { MoonLoader } from "react-spinners";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -17,7 +17,7 @@ const AddPost = ({ setIsAddPostActive }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const author = `${user.firstName} ${user.lastName}`;
+    const author = user._id;
 
     await addPost(author, postContent);
 
@@ -45,11 +45,13 @@ const AddPost = ({ setIsAddPostActive }) => {
       <section className="flex gap-3 items-center">
         {/* profile Img */}
         <div className="h-12 w-12 ">
-          <img
-            src={odinBookLogo}
-            alt="odin book logo"
-            className="h-full w-full rounded-full "
-          />
+          {user && (
+            <img
+              src={user.profileImg.url ? user.profileImg.url : defaultProfile}
+              alt="odin book logo"
+              className="h-full w-full rounded-full "
+            />
+          )}
         </div>
         {/* Profile name */}
         <h2 className="font-semibold">
@@ -112,11 +114,11 @@ const AddPost = ({ setIsAddPostActive }) => {
         </div>
       ) : (
         <div
-          className={`${postContent.length == 0 ? "cursor-not-allowed" : ""}`}
+          className={`${postContent.length === 0 ? "cursor-not-allowed" : ""}`}
         >
           <button
             className={`${
-              postContent.length == 0
+              postContent.length === 0
                 ? "bg-zinc-200 text-zinc-400/50 pointer-events-none "
                 : "bg-blue-600 text-white hover:bg-blue-700/90"
             }  rounded  py-1 text-lg font-semibold  transition duration-300 w-full`}

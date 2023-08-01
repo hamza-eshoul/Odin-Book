@@ -15,16 +15,26 @@ module.exports.create_post = async (req, res) => {
 
     await post.save();
 
-    res.status(200).json({ ...post._doc });
+    const populatePost = await post.populate("author");
+
+    res.status(200).json(populatePost);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-module.exports.get_recent_posts = async (req, res) => {
+module.exports.fetch_recent_posts = async (req, res) => {
+  const { user_and_friends_ids } = req.body;
+
   try {
     // fetch 10 recent posts.
-    const recentPosts = await Post.find().sort({ createdAt: -1 }).limit(10);
+    const recentPosts = await Post.find({
+      author: { $in: user_and_friends_ids },
+    })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .populate("author");
+
     res.status(200).json(recentPosts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -41,13 +51,15 @@ module.exports.get_post = async (req, res) => {
 };
 
 module.exports.get_user_posts = async (req, res) => {
-  const { user_name } = req.params;
+  const { user_id } = req.params;
 
   try {
     // find user posts
-    const userPosts = await Post.find({ author: user_name }).sort({
-      createdAt: -1,
-    });
+    const userPosts = await Post.find({ author: user_id })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("author");
 
     res.status(200).json(userPosts);
   } catch (error) {
@@ -68,7 +80,9 @@ module.exports.create_comment = async (req, res) => {
 
     await comment.save();
 
-    res.status(200).json({ ...comment._doc });
+    const populateComment = await comment.populate("author");
+
+    res.status(200).json(populateComment);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -82,7 +96,9 @@ module.exports.fetch_post_comments = async (req, res) => {
     // fetch post comments
     const postComments = await Comment.find({
       post_id,
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 })
+      .populate("author");
 
     res.status(200).json(postComments);
   } catch (error) {

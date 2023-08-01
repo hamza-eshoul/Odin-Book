@@ -4,6 +4,8 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 const FriendsHome = () => {
   const [users, setUsers] = useState([]);
+  const [cardStatus, setCardStatus] = useState("");
+
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -19,6 +21,8 @@ const FriendsHome = () => {
     );
 
     const fetchUsers = async () => {
+      setUsers([" ", "", " "]);
+      setCardStatus("loading");
       const response = await fetch(
         "http://localhost:4000/user/non_friends_users",
         {
@@ -32,7 +36,10 @@ const FriendsHome = () => {
 
       const json = await response.json();
 
-      setUsers(json);
+      if (response.ok) {
+        setUsers(json);
+        setCardStatus("");
+      }
     };
 
     fetchUsers();
@@ -44,16 +51,34 @@ const FriendsHome = () => {
       <h1 className="text-3xl font-semibold pb-4">Find new friends</h1>
       {/* Friends Cards */}
       <div className="flex gap-5 flex-wrap ml-20">
-        {users &&
-          users.map((user) => (
-            <FriendCard
-              key={user._id}
-              friend_id={user._id}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              friendStatus="Non_Friend"
-            />
-          ))}
+        {cardStatus == "loading" ? (
+          <>
+            {" "}
+            {users.map((user) => (
+              <FriendCard key={user._id} cardStatus="loading" />
+            ))}{" "}
+          </>
+        ) : (
+          <>
+            {users.length !== 0 ? (
+              <>
+                {" "}
+                {users.map((user) => (
+                  <FriendCard
+                    key={user._id}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    friend_id={user._id}
+                    userImage={user.profileImg.url}
+                    friendStatus="Non_Friend"
+                  />
+                ))}{" "}
+              </>
+            ) : (
+              <h3 className="text-xl"> No friends to add </h3>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

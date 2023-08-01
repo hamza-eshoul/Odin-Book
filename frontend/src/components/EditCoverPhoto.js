@@ -4,8 +4,8 @@ import { MoonLoader } from "react-spinners";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { AiOutlinePlus } from "react-icons/ai";
 
-const EditProfilePhoto = ({
-  setIsUpdateProfilePhotoActive,
+const EditCoverPhoto = ({
+  setIsUpdateCoverPhotoActive,
   setCurrentUser,
   currentUser,
 }) => {
@@ -15,8 +15,8 @@ const EditProfilePhoto = ({
   const { user, dispatch } = useAuthContext();
 
   useEffect(() => {
-    if (currentUser.profileImg) {
-      setPreviewSource(currentUser.profileImg.url);
+    if (currentUser.coverImg) {
+      setPreviewSource(currentUser.coverImg.url);
     }
   }, [currentUser]);
 
@@ -41,13 +41,16 @@ const EditProfilePhoto = ({
     setImageUploading(true);
 
     const user_id = user._id;
-    const response = await fetch("http://localhost:4000/user/update_image", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user_id, imageUrl }),
-    });
+    const response = await fetch(
+      "http://localhost:4000/user/update_cover_image",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id, imageUrl }),
+      }
+    );
 
     const json = await response.json();
 
@@ -55,7 +58,7 @@ const EditProfilePhoto = ({
       setImageUploading(false);
       setCurrentUser(json);
       dispatch({ type: "UPDATE_USER", payload: json });
-      setIsUpdateProfilePhotoActive(false);
+      setIsUpdateCoverPhotoActive(false);
     }
   };
 
@@ -65,12 +68,12 @@ const EditProfilePhoto = ({
       <header className="flex border-b-[1px] border-zinc-200 justify-center items-center pb-3">
         <h1 className="text-2xl font-semibold mx-auto">
           {" "}
-          Edit Profile Picture{" "}
+          Edit Profile Cover Photo{" "}
         </h1>
         <div
           className=" p-2 flex justify-center items-center cursor-pointer"
           onClick={() => {
-            setIsUpdateProfilePhotoActive(false);
+            setIsUpdateCoverPhotoActive(false);
           }}
         >
           <RxCross1 className="text-zinc-600 text-xl " />
@@ -83,8 +86,8 @@ const EditProfilePhoto = ({
           <div className="border-[1px] p-4 w-full h-[300px] border-dotted flex items-center justify-center bg-zinc-100/10 border-zinc-300 rounded relative">
             <img
               src={previewSource}
-              alt="Profile Preview"
-              className="h-[250px] w-[250px] object-fit rounded-full"
+              alt="Cover Preview"
+              className="h-[260px] w-[260px] rounded object-fit "
             />
             <div
               className="absolute top-2 right-2 bg-zinc-100 hover:bg-zinc-200 rounded-full p-2 flex justify-center items-center cursor-pointer"
@@ -123,7 +126,6 @@ const EditProfilePhoto = ({
 
           <span> Upload Photo </span>
         </button>
-
         <button
           className="flex justify-center items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 font-semibold text-white rounded"
           onClick={() => {
@@ -141,10 +143,10 @@ const EditProfilePhoto = ({
           ) : (
             <span> Save Changes </span>
           )}
-        </button>
+        </button>{" "}
       </footer>
     </div>
   );
 };
 
-export default EditProfilePhoto;
+export default EditCoverPhoto;

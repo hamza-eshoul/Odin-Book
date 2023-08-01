@@ -6,11 +6,13 @@ import { CgProfile } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { MoonLoader } from "react-spinners";
+import { useLoginDemoAccount } from "../hooks/useLoginDemoAccount";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, isLoading } = useLogin();
+  const { loginDemoAccount, demoError, isDemoLoading } = useLoginDemoAccount();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,15 +102,29 @@ const Login = () => {
               Create a new account
             </Link>
 
-            <button className="flex justify-center items-center bg-white gap-2 border-[1px] border-blue-600 text-zinc-700 font-semibold hover:bg-blue-50/60 transition duration-300 rounded py-2 w-1/2">
+            <button
+              type="button"
+              className="flex justify-center items-center bg-white gap-2 border-[1px] border-blue-600 text-zinc-700 font-semibold hover:bg-blue-50/60 transition duration-300 rounded py-2 w-1/2"
+              onClick={loginDemoAccount}
+            >
               {" "}
               <CgProfile className="text-3xl text-blue-600" />
-              <span className="text-lg">Try a demo account</span>{" "}
+              {isDemoLoading ? (
+                <span className="text-lg"> Loggng in ... </span>
+              ) : (
+                <span className="text-lg">Try a demo account</span>
+              )}
             </button>
           </div>
           {error && (
             <div className="text-red-500 font-semibold text-xl text-center">
               {error}
+            </div>
+          )}
+
+          {demoError && (
+            <div className="text-red-500 font-semibold text-xl text-center">
+              {demoError}
             </div>
           )}
         </form>

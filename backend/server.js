@@ -4,7 +4,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
 const postsRoutes = require("./routes/post");
-const fakeUser = require("./seeds");
 
 // initialize app
 const app = express();
@@ -29,5 +28,3 @@ mongoose
     );
   })
   .catch((err) => console.log(err));
-
-// fakeUser();

@@ -7,6 +7,10 @@ async function createRandomUser() {
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
+    profileImg: {
+      public_id: "",
+      url: faker.image.avatar(),
+    },
   });
 
   await fakeUser.save();
@@ -14,7 +18,7 @@ async function createRandomUser() {
 
 const createMultipleUsers = () => {
   return faker.helpers.multiple(createRandomUser, {
-    count: 10,
+    count: 30,
   });
 };
 

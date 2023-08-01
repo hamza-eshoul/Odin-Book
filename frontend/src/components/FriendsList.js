@@ -5,11 +5,14 @@ import FriendCard from "./FriendCard";
 const FriendsList = () => {
   const { user } = useAuthContext();
   const [friends, setFriends] = useState([]);
+  const [cardStatus, setCardStatus] = useState("");
 
   useEffect(() => {
     const userFriends_ids = user.friends_ids;
 
     const fetchFriends = async () => {
+      setFriends([" ", "", " "]);
+      setCardStatus("loading");
       const response = await fetch("http://localhost:4000/user/friends", {
         method: "POST",
         headers: {
@@ -20,7 +23,10 @@ const FriendsList = () => {
 
       const json = await response.json();
 
-      setFriends(json);
+      if (response.ok) {
+        setFriends(json);
+        setCardStatus("");
+      }
     };
 
     fetchFriends();
@@ -31,18 +37,29 @@ const FriendsList = () => {
       <h1 className="text-3xl font-semibold pb-4">Friends</h1>
 
       <div className="flex gap-5 flex-wrap ml-20">
-        {friends.length !== 0 ? (
-          friends.map((friend) => (
-            <FriendCard
-              key={friend._id}
-              firstName={friend.firstName}
-              lastName={friend.lastName}
-              friend_id={friend._id}
-              friendStatus="Friend"
-            />
-          ))
+        {cardStatus == "loading" ? (
+          <>
+            {friends.map((friend) => (
+              <FriendCard key={friend._id} cardStatus="loading" />
+            ))}
+          </>
         ) : (
-          <h2 className="text-xl"> No friends yet</h2>
+          <>
+            {friends.length !== 0 ? (
+              friends.map((friend) => (
+                <FriendCard
+                  key={friend._id}
+                  firstName={friend.firstName}
+                  lastName={friend.lastName}
+                  friend_id={friend._id}
+                  userImage={friend.profileImg.url}
+                  friendStatus="Friend"
+                />
+              ))
+            ) : (
+              <h2 className="text-xl"> No friends yet</h2>
+            )}
+          </>
         )}
       </div>
     </div>
