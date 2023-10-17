@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import odinBookLogo from "../images/odin-book.jpeg";
-import Footer from "../components/Footer";
+import odinBookLogo from "../../images/odin-book.jpeg";
+import Footer from "../../components/Footer";
 import { FaFacebookSquare } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { Link } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../../hooks/useLogin";
 import { MoonLoader } from "react-spinners";
-import { useLoginDemoAccount } from "../hooks/useLoginDemoAccount";
+import { useLoginDemoAccount } from "../../hooks/useLoginDemoAccount";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,9 +23,7 @@ const Login = () => {
   return (
     <div className="flex flex-col max-w-6xl mx-auto h-screen">
       <div className="h-full flex items-center justify-between gap-12">
-        {/* Odin Book */}
         <section className="flex gap-7 justify-center items-center">
-          {/* odin book logo */}
           <div className="w-[180px] h-[160px] object-fit ">
             <img
               src={odinBookLogo}
@@ -34,14 +32,11 @@ const Login = () => {
             />
           </div>
 
-          {/* odin book text */}
           <p className="text-blue-700 text-4xl font-bold"> Odin Book</p>
         </section>
 
-        {/* spacer */}
         <span className="h-1/2 border-[0.1px] border-blue-500" />
 
-        {/* Log in */}
         <form className="flex flex-col gap-5 w-[40%]" onSubmit={handleSubmit}>
           <h1 className="text-5xl text-slate-900 font-bold text-center">
             {" "}

@@ -3,7 +3,6 @@ const Comment = require("../models/commentModel");
 
 module.exports.create_post = async (req, res) => {
   // desctructure the body of the request
-
   const { author, content } = req.body;
 
   // add post to database

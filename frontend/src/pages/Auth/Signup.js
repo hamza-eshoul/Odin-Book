@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import odinBookLogo from "../images/odin-book.jpeg";
-import Footer from "../components/Footer";
+import odinBookLogo from "../../images/odin-book.jpeg";
+import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
-import { useSignup } from "../hooks/useSignup";
+import { useSignup } from "../../hooks/useSignup";
 import { MoonLoader } from "react-spinners";
 
 const Signup = () => {

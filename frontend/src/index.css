@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .auth_label {
+    @apply flex flex-col gap-1;
+  }
+
+  .auth_label_text {
+    @apply text-[15px] font-medium;
+  }
+
+  .auth_input {
+    @apply rounded w-48 outline-blue-400 border-zinc-200 border-[1px];
+  }
+
+  .auth_btn {
+  }
+}
+
 .active {
   border-bottom-width: 3px;
   border-radius: 2px;

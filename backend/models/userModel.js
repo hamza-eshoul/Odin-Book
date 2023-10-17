@@ -41,15 +41,15 @@ const userSchema = new Schema(
       required: true,
     },
     occupation: {
-      type: "String",
+      type: String,
       required: false,
     },
     education: {
-      type: "String",
+      type: String,
       required: false,
     },
     location: {
-      type: "String",
+      type: String,
       required: false,
     },
     sent_friends_requests: {
