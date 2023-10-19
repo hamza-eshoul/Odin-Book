@@ -8,6 +8,9 @@ router.post("/signup", userController.sign_up);
 // login
 router.post("/login", userController.log_in);
 
+// get all users
+router.get("/all_users", userController.get_all_users);
+
 // get non friend users
 router.post("/non_friends_users", userController.get_non_friends_user);
 

@@ -10,17 +10,11 @@ const createToken = (_id) => {
 
 exports.sign_up = async (req, res) => {
   // signup logic
-  const signup = async (
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword
-  ) => {
+  const signup = async (firstName, lastName, email, password) => {
     // #1 firstName lastName, Email and password validation (form fields)
 
     // Check if form fields exist
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!firstName || !lastName || !email || !password) {
       throw Error("All fields must be filled");
     }
 
@@ -40,11 +34,6 @@ exports.sign_up = async (req, res) => {
       throw Error(
         "Password must at least contain 6 characters and one uppercase letter"
       );
-    }
-
-    // check if password and confirmPassword match
-    if (password !== confirmPassword) {
-      throw Error("The passwords must match");
     }
 
     // #2 DB result validation
@@ -75,17 +64,11 @@ exports.sign_up = async (req, res) => {
   };
 
   // desctructure form body fields
-  const { firstName, lastName, email, password, confirmPassword } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   try {
     // run the signup logic and create user if the logic succeeds
-    const user = await signup(
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword
-    );
+    const user = await signup(firstName, lastName, email, password);
 
     // create a token
     const token = createToken(user._id);
@@ -143,6 +126,15 @@ exports.log_in = async (req, res) => {
   }
 };
 
+exports.get_all_users = async (req, res) => {
+  try {
+    const users_list = await User.find();
+
+    res.status(200).json(users_list);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 exports.get_non_friends_user = async (req, res) => {
   const { user_and_friends_ids } = req.body;
 

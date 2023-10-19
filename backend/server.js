@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
-const postsRoutes = require("./routes/post");
+const postsRoutes = require("./routes/posts");
 
 // initialize app
 const app = express();
@@ -14,7 +14,7 @@ app.use(express.json({ limit: "50mb" }));
 
 // routes
 app.use("/user", userRoutes);
-app.use("/post", postsRoutes);
+app.use("/posts", postsRoutes);
 
 // connect to db
 mongoose

@@ -11,6 +11,16 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
+    postImage: {
+      public_id: {
+        type: String,
+        default: "",
+      },
+      url: {
+        type: String,
+        default: "",
+      },
+    },
     usersLikes: {
       type: Array,
       required: true,

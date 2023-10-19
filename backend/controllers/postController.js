@@ -1,40 +1,61 @@
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
+const cloudinary = require("../cloudinary");
 
-module.exports.create_post = async (req, res) => {
-  // desctructure the body of the request
-  const { author, content } = req.body;
-
-  // add post to database
+module.exports.get_posts = async (req, res) => {
   try {
-    const post = new Post({
-      author,
-      content,
-    });
+    const posts = await Post.find();
 
-    await post.save();
-
-    const populatePost = await post.populate("author");
-
-    res.status(200).json(populatePost);
+    res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-module.exports.fetch_recent_posts = async (req, res) => {
-  const { user_and_friends_ids } = req.body;
+module.exports.create_post = async (req, res) => {
+  // desctructure the body of the request
+  const { author, content, image } = req.body;
+
+  // add post to database
 
   try {
-    // fetch 10 recent posts.
-    const recentPosts = await Post.find({
-      author: { $in: user_and_friends_ids },
-    })
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .populate("author");
+    if (!image) {
+      const postWithtoutImage = new Post({
+        author,
+        content,
+        postImage: {
+          public_id: "",
+          url: "",
+        },
+      });
 
-    res.status(200).json(recentPosts);
+      await postWithtoutImage.save();
+
+      const populatedPost = await postWithtoutImage.populate("author");
+
+      res.status(200).json(populatedPost);
+    }
+
+    if (image) {
+      const result = await cloudinary.uploader.upload(image, {
+        folder: "odin_book_post_images",
+      });
+
+      const postWithImage = new Post({
+        author,
+        content,
+        postImage: {
+          public_id: result.public_id,
+          url: result.secure_url,
+        },
+      });
+
+      await postWithImage.save();
+
+      const populatedPost = await postWithImage.populate("author");
+
+      res.status(200).json(populatedPost);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -7,7 +7,7 @@ export const useAddPost = () => {
 
   const { dispatch } = usePostContext();
 
-  const addPost = async (author, content) => {
+  const addPost = async (author, content, image) => {
     setIsLoading(true);
     setError(null);
 
@@ -16,7 +16,7 @@ export const useAddPost = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ author, content }),
+      body: JSON.stringify({ author, content, image }),
     });
 
     const json = await response.json();

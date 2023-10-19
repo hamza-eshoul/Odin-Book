@@ -6,6 +6,10 @@ module.exports = {
       fontFamily: {
         cabinetGrotesk: ["Cabinet Grotesk", "sans-serif"],
       },
+      colors: {
+        mainBlue: "#0066dd",
+        darkBlue: "#0d2862",
+      },
     },
   },
   plugins: [],
