@@ -9,13 +9,13 @@ export const useUpdatePostComment = () => {
     setError(null);
 
     const response = await fetch(
-      "http://localhost:4000/posts/comments/update_comment",
+      `http://localhost:4000/posts/comments/${comment_id}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ comment_id, updated_comment_content }),
+        body: JSON.stringify({ updated_comment_content }),
       },
     );
 

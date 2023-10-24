@@ -9,13 +9,12 @@ export const useDeletePostComment = () => {
     setError(null);
 
     const response = await fetch(
-      "http://localhost:4000/posts/comments/delete_comment",
+      `http://localhost:4000/posts/comments/${comment_id}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ comment_id }),
       },
     );
 

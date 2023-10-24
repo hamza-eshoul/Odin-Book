@@ -14,13 +14,13 @@ export const useAcceptFriendRequest = () => {
     setError(null);
 
     const response = await fetch(
-      "http://localhost:4000/users/accept_friend_request",
+      `http://localhost:4000/users/${user_id}/accept_friend_request`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id, friend_id }),
+        body: JSON.stringify({ friend_id }),
       },
     );
 

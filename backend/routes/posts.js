@@ -6,24 +6,24 @@ const postController = require("../controllers/postController");
 
 router.get("/", postController.get_posts);
 
-router.post("/create", postController.create_post);
-
-router.get("/:post_id", postController.get_post);
+router.get("/:id", postController.get_post);
 
 router.get("/profile_posts/:profile_id", postController.get_profile_posts);
 
-router.put("/update_likes", postController.update_post_likes);
+router.post("/", postController.create_post);
 
-router.delete("/delete_post", postController.delete_post);
+router.delete("/:id", postController.delete_post);
+
+router.put("/:id/post_likes", postController.update_post_likes);
 
 // #2 Posts Comments
 
-router.get("/comments/:post_id", postController.fetch_post_comments);
+router.get("/:post_id/comments", postController.fetch_post_comments);
 
-router.post("/comments/add_comment", postController.add_post_comment);
+router.post("/:post_id/comments", postController.add_post_comment);
 
-router.put("/comments/update_comment", postController.update_post_comment);
+router.put("/comments/:comment_id", postController.update_post_comment);
 
-router.delete("/comments/delete_comment", postController.delete_post_comment);
+router.delete("/comments/:comment_id", postController.delete_post_comment);
 
 module.exports = router;

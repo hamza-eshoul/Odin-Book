@@ -10,7 +10,7 @@ export const useFetchPostComments = (post_id) => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/posts/comments/${post_id}`,
+      `http://localhost:4000/posts/${post_id}/comments`,
     );
 
     const json = await response.json();

@@ -15,8 +15,10 @@ const UpdateProfileImage = ({
   setIsUpdateProfileImage,
 }) => {
   const [previewSource, setPreviewSource] = useState("");
+
+  const user_id = profile._id;
   const { updateUser, isPending, error } = useUpdateUser(
-    "http://localhost:4000/users/update_profile_image",
+    `http://localhost:4000/users/${user_id}/profile_image`,
   );
 
   useEffect(() => {
@@ -47,10 +49,7 @@ const UpdateProfileImage = ({
   };
 
   const uploadImage = async (imageUrl) => {
-    const user_id = profile._id;
-
     const updated_user = await updateUser({
-      user_id,
       imageUrl,
     });
 

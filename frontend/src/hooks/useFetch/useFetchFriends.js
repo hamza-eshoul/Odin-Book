@@ -10,7 +10,7 @@ export const useFetchFriends = (user_id) => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/users/friends/${user_id}`,
+      `http://localhost:4000/users/${user_id}/friends`,
     );
 
     const json = await response.json();

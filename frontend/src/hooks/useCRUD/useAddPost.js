@@ -10,7 +10,7 @@ export const useAddPost = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/posts/create", {
+    const response = await fetch("http://localhost:4000/posts/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

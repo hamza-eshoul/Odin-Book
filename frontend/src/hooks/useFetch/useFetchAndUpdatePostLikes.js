@@ -30,13 +30,16 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/posts/update_likes", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:4000/posts/${post_id}/post_likes`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id }),
       },
-      body: JSON.stringify({ post_id, user_id }),
-    });
+    );
 
     const json = await response.json();
 

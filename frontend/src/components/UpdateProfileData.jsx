@@ -20,8 +20,10 @@ const UpdateProfileData = ({ profile, setProfile, setIsUpdateProfileData }) => {
   const [education, setEducation] = useState("");
   const [location, setLocation] = useState("");
 
+  const user_id = profile._id;
+
   const { updateUser, isPending, error } = useUpdateUser(
-    "http://localhost:4000/users/update_profile_data",
+    `http://localhost:4000/users/${user_id}/profile_data`,
   );
 
   useEffect(() => {
@@ -49,10 +51,7 @@ const UpdateProfileData = ({ profile, setProfile, setIsUpdateProfileData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user_id = profile._id;
-
     const updated_user = await updateUser({
-      user_id,
       firstName,
       lastName,
       email,

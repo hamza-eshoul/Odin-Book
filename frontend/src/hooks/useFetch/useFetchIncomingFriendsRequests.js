@@ -15,7 +15,7 @@ export const useFetchIncomingFriendsRequests = () => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/users/incoming_friends_requests/${user_id}`,
+      `http://localhost:4000/users/${user_id}/incoming_friend_requests`,
     );
 
     const json = await response.json();

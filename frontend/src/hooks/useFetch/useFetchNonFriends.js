@@ -13,7 +13,7 @@ export const useFetchnNonFriends = () => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/users/non_friends_users/${user._id}`,
+      `http://localhost:4000/users/${user._id}/non_friends`,
     );
 
     const json = await response.json();

@@ -9,13 +9,13 @@ export const useAddPostComment = () => {
     setError(null);
 
     const response = await fetch(
-      "http://localhost:4000/posts/comments/add_comment",
+      `http://localhost:4000/posts/${post_id}/comments`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ author, content, post_id }),
+        body: JSON.stringify({ author, content }),
       },
     );
 

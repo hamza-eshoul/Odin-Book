@@ -10,12 +10,11 @@ export const useDeletePost = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/posts/delete_post", {
+    const response = await fetch(`http://localhost:4000/posts/${post_id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ post_id }),
     });
 
     const json = await response.json();
