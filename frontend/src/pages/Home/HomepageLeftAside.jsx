@@ -1,23 +1,38 @@
-import defaultProfile from "../../assets/images/defaultProfile.png";
-import { FaUserFriends } from "react-icons/fa";
-import { CgProfile } from "react-icons/cg";
+import { useState } from "react";
+import { useAuthContext } from "../../hooks/useContext/useAuthContext";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import HomepageAsideCard from "./HomepageAsideCard";
+
+// images
+import defaultProfile from "../../assets/images/defaultProfile.png";
+
+// icons
 import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { VscGraph } from "react-icons/vsc";
 import { HiUserGroup } from "react-icons/hi";
+import { FaUserFriends } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+
+// components
+import HomepageAsideCard from "./HomepageAsideCard";
+import Toast from "../../components/Toast";
 
 const aside_card_items = [
-  { title: "Profile", icon: <CgProfile /> },
-  { title: "Friends", icon: <FaUserFriends /> },
   { title: "Marketplace", icon: <SiHomeassistantcommunitystore /> },
   { title: "Ads Manager", icon: <VscGraph /> },
   { title: "Groups", icon: <HiUserGroup /> },
 ];
 
 const HomepageLeftAside = () => {
+  const [toastNotification, setToastNotification] = useState(false);
   const { user } = useAuthContext();
+
+  const toggleToastNotification = () => {
+    setToastNotification(true);
+
+    setTimeout(() => {
+      setToastNotification(null);
+    }, 5000);
+  };
 
   return (
     <section className="flex w-[25%] flex-col items-center">
@@ -34,21 +49,51 @@ const HomepageLeftAside = () => {
           </div>
 
           <div className="flex flex-col">
-            <span className="font-semibold">
+            <Link
+              className="font-semibold hover:underline"
+              to={`/profile/${user._id}/`}
+            >
               {user.firstName} {user.lastName}{" "}
-            </span>
+            </Link>
             <span className="text-[15px] text-zinc-500">
               @{user.occupation ? user.occupation : "No profession inserted"}
             </span>
           </div>
         </div>
       </HomepageAsideCard>
+
       <HomepageAsideCard>
         <ul className="space-y-2">
+          <li>
+            <Link
+              className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
+              to={`/profile/${user._id}/`}
+            >
+              {" "}
+              <div className="text-2xl text-zinc-500">
+                <CgProfile />
+              </div>
+              <span className="text-[17px] font-light">Profile</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
+              to="/friends/"
+            >
+              <div className="text-2xl text-zinc-500">
+                <FaUserFriends />
+              </div>
+
+              <span className="text-[17px] font-light">Friends</span>
+            </Link>
+          </li>
+
           {aside_card_items.map((item) => (
             <li
               key={item.title}
               className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
+              onClick={toggleToastNotification}
             >
               <div className="text-2xl text-zinc-500">{item.icon}</div>
 
@@ -57,6 +102,15 @@ const HomepageLeftAside = () => {
           ))}
         </ul>
       </HomepageAsideCard>
+      {toastNotification && (
+        <Toast
+          elementType={"Button"}
+          bgColor={"bg-mainBlue"}
+          textColor={"text-white"}
+          toastNotification={toastNotification}
+          setToastNotification={setToastNotification}
+        />
+      )}
     </section>
   );
 };

@@ -1,10 +1,23 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
+import { useLogout } from "../hooks/useAuth/useLogout";
 
-const NavMenu = ({ user }) => {
+// components
+import Toast from "../components/Toast";
+
+const NavMenu = ({ user, setIsNavMenu }) => {
+  const [toastNotification, setToastNotification] = useState(false);
   const { logout } = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const toggleToastNotification = () => {
+    setToastNotification(true);
+
+    setTimeout(() => {
+      setToastNotification(null);
+    }, 5000);
+  };
 
   const dynamicallyNavigateToProfile = () => {
     const path = location.pathname.split("/")[1];
@@ -23,21 +36,40 @@ const NavMenu = ({ user }) => {
         className="cursor-pointer border-b-[1px] px-2.5 py-1.5 transition duration-300 hover:bg-[#f8fafd]"
         onClick={() => {
           dynamicallyNavigateToProfile();
+          setIsNavMenu(false);
         }}
       >
         {" "}
         View Profile
       </li>
-      <li className="cursor-pointer border-b-[1px] px-2.5 py-1.5 transition duration-300 hover:bg-[#f8fafd]">
+      <li
+        className="cursor-pointer border-b-[1px] px-2.5 py-1.5 transition duration-300 hover:bg-[#f8fafd]"
+        onClick={toggleToastNotification}
+      >
         {" "}
         Settings
       </li>
-      <Link to="/login" onClick={logout}>
+      <Link
+        to="/login"
+        onClick={() => {
+          logout();
+          setIsNavMenu(false);
+        }}
+      >
         <li className="cursor-pointer px-2.5 py-1.5  transition duration-300 hover:bg-[#f8fafd]">
           {" "}
           Log out
         </li>
       </Link>
+      {toastNotification && (
+        <Toast
+          elementType={"Button"}
+          bgColor={"bg-mainBlue"}
+          textColor={"text-white"}
+          toastNotification={toastNotification}
+          setToastNotification={setToastNotification}
+        />
+      )}
     </ul>
   );
 };

@@ -1,86 +1,53 @@
-import React, { useEffect, useState } from "react";
-import FriendCard from "./FriendCard";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFetchnNonFriends } from "../../hooks/useFetch/useFetchNonFriends";
+
+// components
+import Error from "../../components/Error";
+import NonFriendCard from "./NonFriendCard";
+
+const pending_friends_cards = [
+  { id: 1 },
+  { id: 2 },
+  { id: 3 },
+  { id: 4 },
+  { id: 5 },
+  { id: 6 },
+  { id: 7 },
+  { id: 8 },
+  { id: 9 },
+  { id: 10 },
+];
 
 const FriendsHome = () => {
-  const [users, setUsers] = useState([]);
-  const [cardStatus, setCardStatus] = useState("");
-
-  const { user } = useAuthContext();
-
-  // use the new hook created when you reach this component refactoring
-
-  useEffect(() => {
-    const userFriends_ids = user.friends_ids;
-    const userSentRequests = user.sent_friends_requests;
-    const userIncomingRequests = user.incoming_friends_requests;
-    const user_id = user._id;
-
-    const user_and_friends_ids = userFriends_ids.concat(
-      userSentRequests,
-      userIncomingRequests,
-      user_id,
-    );
-
-    const fetchUsers = async () => {
-      setUsers([" ", "", " "]);
-      setCardStatus("loading");
-      const response = await fetch(
-        "http://localhost:4000/user/non_friends_users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user_and_friends_ids }),
-        },
-      );
-
-      const json = await response.json();
-
-      if (response.ok) {
-        setUsers(json);
-        setCardStatus("");
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  const { nonFriendsList, isPending, error } = useFetchnNonFriends();
 
   return (
     <div className="w-4/5 bg-[#fbfcfe] px-14 py-10">
-      {/* Header */}
       <h1 className="pb-4 text-2xl font-semibold">Find new friends</h1>
-      {/* Friends Cards */}
+
       <div className=" flex flex-wrap gap-5">
-        {cardStatus == "loading" ? (
-          <>
-            {" "}
-            {users.map((user) => (
-              <FriendCard key={user._id} cardStatus="loading" />
-            ))}{" "}
-          </>
-        ) : (
-          <>
-            {users.length !== 0 ? (
-              <>
-                {" "}
-                {users.map((user) => (
-                  <FriendCard
-                    key={user._id}
-                    firstName={user.firstName}
-                    lastName={user.lastName}
-                    friend_id={user._id}
-                    userImage={user.profileImg.url}
-                    friendStatus="Non_Friend"
-                  />
-                ))}{" "}
-              </>
-            ) : (
-              <h3 className="text-xl"> No friends to add </h3>
-            )}
-          </>
+        {isPending &&
+          pending_friends_cards.map((card) => (
+            <NonFriendCard key={card.id} isCardLoading={true} />
+          ))}
+
+        {!isPending &&
+          nonFriendsList &&
+          nonFriendsList.length !== 0 &&
+          nonFriendsList.map((non_friend) => (
+            <NonFriendCard
+              key={non_friend._id}
+              firstName={non_friend.firstName}
+              lastName={non_friend.lastName}
+              id={non_friend._id}
+              profile_image={non_friend.profileImg.url}
+            />
+          ))}
+
+        {!isPending && nonFriendsList && nonFriendsList.length == 0 && (
+          <h3 className="text-[17px]"> No friends to add </h3>
         )}
+
+        {error && <Error error={error} />}
       </div>
     </div>
   );

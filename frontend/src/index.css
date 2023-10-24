@@ -12,11 +12,15 @@
   }
 
   .auth_input {
-    @apply outline-mainBlue rounded border-[1px] border-zinc-200 px-2 py-2 shadow-sm focus:bg-[#f8fafd] focus:drop-shadow-xl;
+    @apply rounded border-[1px] border-zinc-200 px-2 py-2 shadow-sm outline-mainBlue focus:bg-[#f8fafd] focus:drop-shadow-xl;
+  }
+
+  .form_label {
+    @apply flex flex-col gap-1.5;
   }
 
   .auth_btn {
-    @apply bg-mainBlue rounded py-[8px] font-medium text-white transition-opacity duration-300 ease-in-out hover:opacity-70;
+    @apply rounded bg-mainBlue py-[8px] font-medium text-white transition-opacity duration-300 ease-in-out hover:opacity-70;
   }
 }
 

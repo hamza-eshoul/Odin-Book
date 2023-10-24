@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSignup } from "../../hooks/useSignup";
+import { useSignup } from "../../hooks/useAuth/useSignup";
 
 // images
 import logo from "../../assets/images/odin-book.png";

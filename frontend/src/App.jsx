@@ -1,8 +1,7 @@
-import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthContext } from "./hooks/useContext/useAuthContext";
 
 // components
-
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Homepage from "./pages/Home/Homepage";
@@ -18,46 +17,56 @@ import FriendsRequests from "./pages/Friends/FriendsRequests";
 import FriendsList from "./pages/Friends/FriendsList";
 
 const App = () => {
-  const [isAddPostActive, setIsAddPostActive] = useState(false);
+  const { user, authIsReady } = useAuthContext();
 
   return (
-    <div className="">
-      <BrowserRouter>
-        <Navbar setIsAddPostActive={setIsAddPostActive} />
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace={true} />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/homepage"
-            element={
-              <Homepage
-                isAddPostActive={isAddPostActive}
-                setIsAddPostActive={setIsAddPostActive}
-              />
-            }
-          />
-          <Route path="/friends" element={<Friends />}>
-            <Route index element={<FriendsHome />} />
-            <Route path="requests" element={<FriendsRequests />} />
-            <Route path="list" element={<FriendsList />} />
-          </Route>
-
-          <Route path="/profile/:id" element={<Profile />}>
+    <>
+      {authIsReady && (
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
             <Route
-              index
+              path="/"
               element={
-                <ProfileHome
-                  isAddPostActive={isAddPostActive}
-                  setIsAddPostActive={setIsAddPostActive}
-                />
+                user ? (
+                  <Navigate to="/homepage" />
+                ) : (
+                  <Navigate to="/login" replace={true} />
+                )
               }
             />
-            <Route path="friends" element={<ProfileFriends />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+            <Route
+              path="/login"
+              element={user ? <Navigate to="/homepage" /> : <Login />}
+            />
+            <Route
+              path="/signup"
+              element={user ? <Navigate to="/homepage" /> : <Signup />}
+            />
+            <Route
+              path="/homepage"
+              element={user ? <Homepage /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/friends"
+              element={user ? <Friends /> : <Navigate to="/login" />}
+            >
+              <Route index element={<FriendsHome />} />
+              <Route path="requests" element={<FriendsRequests />} />
+              <Route path="list" element={<FriendsList />} />
+            </Route>
+
+            <Route
+              path="/profile/:id"
+              element={user ? <Profile /> : <Navigate to="/login" />}
+            >
+              <Route index element={<ProfileHome />} />
+              <Route path="friends" element={<ProfileFriends />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      )}
+    </>
   );
 };
 

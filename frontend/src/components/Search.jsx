@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
-import { HiMagnifyingGlass } from "react-icons/hi2";
-import { useFetchAllUsers } from "../hooks/useFetchAllUsers";
-import defaultProfile from "../assets/images/defaultProfile.png";
-import { BiSearchAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useFetchUsers } from "../hooks/useFetch/useFetchUsers";
+
+// images
+import defaultProfile from "../assets/images/defaultProfile.png";
+
+// icons
+import { BiSearchAlt } from "react-icons/bi";
+import { HiMagnifyingGlass } from "react-icons/hi2";
+
+// components
+import Loading from "./Loading";
+import Error from "./Error";
 
 const Search = () => {
   const [queryText, setQueryText] = useState("");
   const [filteredArray, setFilteredArray] = useState(null);
-  const { usersList, isPending, error } = useFetchAllUsers();
+  const { usersList, isPending, error } = useFetchUsers();
 
   useEffect(() => {
     if (usersList) {
@@ -34,40 +42,41 @@ const Search = () => {
       />
 
       {queryText !== "" && (
-        <ul className="absolute top-4 z-20 flex max-h-[600px] w-full translate-y-10 flex-col overflow-auto bg-white">
-          {filteredArray.map((user) => (
-            <li>
-              <Link reloadDocument to={`/profile/${user._id}`}>
-                <div className="flex items-center justify-between px-2 pr-5 hover:bg-zinc-100/50">
-                  <div className="flex h-[70px] cursor-pointer items-center gap-2">
-                    {/* Profile Img */}
-                    <div className="w-18 h-11 pl-6">
-                      <img
-                        src={
-                          user.profileImg.url
-                            ? user.profileImg.url
-                            : defaultProfile
-                        }
-                        className="h-full w-full rounded-full object-cover"
-                      />
-                    </div>
+        <ul className="absolute top-0 z-50 flex max-h-[600px] w-full translate-y-10 flex-col overflow-auto border-[1px] border-zinc-100 bg-white shadow-lg">
+          {isPending && <Loading />}
+          {error && <Error error={error} />}
+          {!isPending &&
+            filteredArray.map((user) => (
+              <li>
+                <Link reloadDocument to={`/profile/${user._id}/`}>
+                  <div className="flex items-center justify-between px-6 hover:bg-zinc-100/50">
+                    <div className="flex cursor-pointer items-center gap-2 py-5">
+                      <div className="h-12 w-12">
+                        <img
+                          src={
+                            user.profileImg.url
+                              ? user.profileImg.url
+                              : defaultProfile
+                          }
+                          alt="profile"
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      </div>
 
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {" "}
-                        {user.firstName} {user.lastName}{" "}
-                      </p>
-                      <p className="text-sm text-[#737373]">
-                        {" "}
-                        {user.firstName} {user.lastName}{" "}
-                      </p>
-                    </div>
-                  </div>{" "}
-                  <BiSearchAlt className="text-2xl" />
-                </div>
-              </Link>
-            </li>
-          ))}
+                      <div>
+                        <p className="text-sm font-semibold">
+                          {user.firstName} {user.lastName}{" "}
+                        </p>
+                        <p className="text-sm text-[#737373]">
+                          {user.firstName} {user.lastName}{" "}
+                        </p>
+                      </div>
+                    </div>{" "}
+                    <BiSearchAlt className="text-2xl" />
+                  </div>
+                </Link>
+              </li>
+            ))}
         </ul>
       )}
     </div>

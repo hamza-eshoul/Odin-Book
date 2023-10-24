@@ -2,25 +2,28 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/postController");
 
-// get posts
+// #1 Posts
+
 router.get("/", postController.get_posts);
 
-// create post
 router.post("/create", postController.create_post);
 
-// get individual post
 router.get("/:post_id", postController.get_post);
 
-// get profile page user posts
-router.get("/user_posts/:user_id", postController.get_user_posts);
+router.get("/profile_posts/:profile_id", postController.get_profile_posts);
 
-// create comment
-router.post("/create_comment", postController.create_comment);
+router.put("/update_likes", postController.update_post_likes);
 
-// fetch post comments
-router.post("/comments", postController.fetch_post_comments);
+router.delete("/delete_post", postController.delete_post);
 
-// update post likes
-router.put("/likes", postController.update_post_likes);
+// #2 Posts Comments
+
+router.get("/comments/:post_id", postController.fetch_post_comments);
+
+router.post("/comments/add_comment", postController.add_post_comment);
+
+router.put("/comments/update_comment", postController.update_post_comment);
+
+router.delete("/comments/delete_comment", postController.delete_post_comment);
 
 module.exports = router;

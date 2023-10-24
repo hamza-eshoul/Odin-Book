@@ -126,7 +126,7 @@ exports.log_in = async (req, res) => {
   }
 };
 
-exports.get_all_users = async (req, res) => {
+exports.get_users = async (req, res) => {
   try {
     const users_list = await User.find();
 
@@ -135,24 +135,42 @@ exports.get_all_users = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-exports.get_non_friends_user = async (req, res) => {
-  const { user_and_friends_ids } = req.body;
+
+exports.get_non_friends_users = async (req, res) => {
+  const { user_id } = req.params;
+
+  const user = await User.findById(user_id);
+
+  const generateUserAndFriendsIdsArray = () => {
+    const userFriends_ids = user.friends_ids;
+    const userSentRequests = user.sent_friends_requests;
+    const userIncomingRequests = user.incoming_friends_requests;
+    const user_id = user._id;
+
+    return userFriends_ids.concat(
+      userSentRequests,
+      userIncomingRequests,
+      user_id
+    );
+  };
+
+  const user_and_friends_ids = generateUserAndFriendsIdsArray();
 
   try {
-    // fetch all non-friends users
-    const users = await User.find({ _id: { $nin: user_and_friends_ids } });
-    res.status(200).json(users);
+    const non_friends_users = await User.find({
+      _id: { $nin: user_and_friends_ids },
+    });
+    res.status(200).json(non_friends_users);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 exports.get_user = async (req, res) => {
-  const { userId } = req.params;
+  const { user_id } = req.params;
 
   try {
-    // fetch uer
-    const user = await User.findById(userId);
+    const user = await User.findById(user_id);
 
     res.status(200).json(user);
   } catch (error) {
@@ -161,13 +179,19 @@ exports.get_user = async (req, res) => {
 };
 
 exports.get_friends = async (req, res) => {
-  const { userFriends_ids } = req.body;
+  const { user_id } = req.params;
+
+  const user = await User.findById(user_id);
+
+  const user_friends_ids = user.friends_ids;
 
   try {
-    // fetch all user friends
-    const userFriends = await User.find({ _id: { $in: userFriends_ids } });
-
-    res.status(200).json(userFriends);
+    if (user_friends_ids) {
+      const users_friends = await User.find({
+        _id: { $in: user_friends_ids },
+      });
+      res.status(200).json(users_friends);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -188,30 +212,45 @@ exports.get_limited_friends = async (req, res) => {
   }
 };
 
-exports.get_friends_requests = async (req, res) => {
-  const { sent_friends_requests, incoming_friends_requests } = req.body;
+exports.get_incoming_friends_requests = async (req, res) => {
+  const { user_id } = req.params;
+
+  const user = await User.findById(user_id);
+
+  const incoming_friends_requests = user.incoming_friends_requests;
 
   try {
-    // fetch all sent friends requests
-    const sentFriendsRequests = await User.find({
-      _id: { $in: sent_friends_requests },
-    });
-
-    // fetch all incoming friends requests
     const incomingFriendsRequests = await User.find({
       _id: { $in: incoming_friends_requests },
     });
-    res.status(200).json({ sentFriendsRequests, incomingFriendsRequests });
+    res.status(200).json(incomingFriendsRequests);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.add_friend_request = async (req, res) => {
+exports.get_sent_friends_requests = async (req, res) => {
+  const { user_id } = req.params;
+
+  const user = await User.findById(user_id);
+
+  const sent_friends_requests = user.sent_friends_requests;
+
+  try {
+    const sentFriendsRequests = await User.find({
+      _id: { $in: sent_friends_requests },
+    });
+
+    res.status(200).json(sentFriendsRequests);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.send_friend_request = async (req, res) => {
   const { user_id, friend_id } = req.body;
 
   try {
-    // Find the logged in user and update his sent friends requests
     const user = await User.findByIdAndUpdate(
       user_id,
       {
@@ -220,8 +259,7 @@ exports.add_friend_request = async (req, res) => {
       { new: true }
     );
 
-    // Find the added friend and update his incoming friends requests
-    const addedFriend = await User.findByIdAndUpdate(friend_id, {
+    const added_friend = await User.findByIdAndUpdate(friend_id, {
       $push: { incoming_friends_requests: user_id },
     });
 
@@ -232,80 +270,60 @@ exports.add_friend_request = async (req, res) => {
 };
 
 exports.cancel_friend_request = async (req, res) => {
-  const { user_id, friend_id, userSentRequests } = req.body;
+  const { user_id, friend_id } = req.body;
 
-  // filter user sent requests array
-  const filterSentRequests = userSentRequests.filter(
+  const user = await User.findById(user_id);
+  const filtered_user_sent_requests = user.sent_friends_requests.filter(
     (request) => request !== friend_id
   );
 
-  // get friend's incoming requests array
-  const friendIncomingRequests = await User.findById(friend_id, {
-    incoming_friends_requests: 1,
-    _id: 0,
-  });
-
-  // filter friend incoming requests array
-  const filtereIncomingRequests =
-    friendIncomingRequests.incoming_friends_requests.filter(
-      (request) => request !== user_id
-    );
+  const friend = await User.findById(friend_id);
+  const filtered_friend_incoming_requests =
+    friend.incoming_friends_requests.filter((request) => request !== user_id);
 
   try {
-    // find user and update his sent_friends_requests field
-    const updateUser = await User.findByIdAndUpdate(
+    const updated_user = await User.findByIdAndUpdate(
       user_id,
       {
         $set: {
-          sent_friends_requests: filterSentRequests,
+          sent_friends_requests: filtered_user_sent_requests,
         },
       },
       {
         new: true,
       }
     );
-    // find friend and update his incoming_friend_requests field
-    const updateFriend = await User.findByIdAndUpdate(
-      friend_id,
-      {
-        $set: {
-          incoming_friends_requests: filtereIncomingRequests,
-        },
-      },
-      { new: true }
-    );
 
-    res.status(200).json(updateUser);
+    const updated_friend = await User.findByIdAndUpdate(friend_id, {
+      $set: {
+        incoming_friends_requests: filtered_friend_incoming_requests,
+      },
+    });
+
+    res.status(200).json(updated_user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 exports.accept_friend_request = async (req, res) => {
-  const { user_id, friend_id, userIncomingRequests } = req.body;
+  const { user_id, friend_id } = req.body;
 
-  // filter user incoming requests fields
-  const filterIncomingRequests = userIncomingRequests.filter(
+  const user = await User.findById(user_id);
+  const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
     (request) => request !== friend_id
   );
 
-  // get friend's sent requests array
-  const friendSentRequests = await User.findById(friend_id, {
-    sent_friends_requests: 1,
-    _id: 0,
-  });
-
-  // filter friend sent request fields
-  const filterSentRequests = friendSentRequests.sent_friends_requests.filter(
+  const friend = await User.findById(friend_id);
+  const filtered_friend_sent_requests = friend.sent_friends_requests.filter(
     (request) => request !== user_id
   );
 
   try {
-    // find user and update his friends and incoming requests fields
-    const updateUser = await User.findByIdAndUpdate(
+    const updated_user = await User.findByIdAndUpdate(
       user_id,
       {
-        $set: { incoming_friends_requests: filterIncomingRequests },
+        $set: { incoming_friends_requests: filtered_user_incoming_requests },
         $push: {
           friends_ids: friend_id,
         },
@@ -313,110 +331,88 @@ exports.accept_friend_request = async (req, res) => {
       { new: true }
     );
 
-    // find friend and update his friends and sent request felds
-    const updateFriend = await User.findByIdAndUpdate(
-      friend_id,
-      {
-        $set: { sent_friends_requests: filterSentRequests },
-        $push: {
-          friends_ids: user_id,
-        },
+    const updated_friend = await User.findByIdAndUpdate(friend_id, {
+      $set: { sent_friends_requests: filtered_friend_sent_requests },
+      $push: {
+        friends_ids: user_id,
       },
-      { new: true }
-    );
+    });
 
-    res.status(200).json(updateUser);
+    res.status(200).json(updated_user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 exports.reject_friend_request = async (req, res) => {
-  const { user_id, friend_id, userIncomingRequests } = req.body;
+  const { user_id, friend_id } = req.body;
 
-  // filter user incoming requests field
-  const filterIncomingRequests = userIncomingRequests.filter(
+  const user = await User.findById(user_id);
+  const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
     (request) => request !== friend_id
   );
 
-  // get friend's sent requests array
-  const friendSentRequests = await User.findById(friend_id, {
-    sent_friends_requests: 1,
-    _id: 0,
-  });
-
-  // filter friend sent request fields
-  const filterSentRequests = friendSentRequests.sent_friends_requests.filter(
+  const friend = await User.findById(friend_id);
+  const filtered_friend_sent_requests = friend.sent_friends_requests.filter(
     (request) => request !== user_id
   );
 
   try {
-    // find user and update his incoming requests field only
-    const updateUser = await User.findByIdAndUpdate(
+    const updated_user = await User.findByIdAndUpdate(
       user_id,
       {
         $set: {
-          incoming_friends_requests: filterIncomingRequests,
-        },
-      },
-      { new: true }
-    );
-    // find friend and update his sent request field only.
-    const updateFriend = await User.findByIdAndUpdate(
-      friend_id,
-      {
-        $set: {
-          sent_friends_requests: filterSentRequests,
+          incoming_friends_requests: filtered_user_incoming_requests,
         },
       },
       { new: true }
     );
 
-    res.status(200).json(updateUser);
+    const updated_friend = await User.findByIdAndUpdate(friend_id, {
+      $set: {
+        sent_friends_requests: filtered_friend_sent_requests,
+      },
+    });
+
+    res.status(200).json(updated_user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.remove_friend = async (req, res) => {
-  const { user_id, friend_id, user_friends_ids, friend_friends_ids } = req.body;
+exports.delete_friend = async (req, res) => {
+  const { user_id, friend_id } = req.body;
 
-  // filter user_friends ids
-  const filterUserIds = user_friends_ids.filter(
+  const user = await User.findById(user_id);
+  const filtered_user_friends_ids = user.friends_ids.filter(
     (friend) => friend !== friend_id
   );
 
-  // filter friend_friends ids
-  const filterFriendIds = friend_friends_ids.filter(
+  const friend = await User.findById(friend_id);
+  const filtered_friend_friends_ids = friend.friends_ids.filter(
     (friend) => friend !== user_id
   );
 
   try {
-    // find user and update his friends_ids
-    const updateUser = await User.findByIdAndUpdate(
+    const updated_user = await User.findByIdAndUpdate(
       user_id,
       {
-        $set: { friends_ids: filterUserIds },
+        $set: { friends_ids: filtered_user_friends_ids },
       },
       { new: true }
     );
 
-    // findfriend and update his friends_ids
-    const updateFriend = await User.findByIdAndUpdate(
-      friend_id,
-      {
-        $set: { friends_ids: filterFriendIds },
-      },
-      { new: true }
-    );
+    const updated_friend = await User.findByIdAndUpdate(friend_id, {
+      $set: { friends_ids: filtered_friend_friends_ids },
+    });
 
-    res.status(200).json(updateUser);
+    res.status(200).json(updated_user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.update_user_info = async (req, res) => {
+exports.update_profile_data = async (req, res) => {
   const {
     user_id,
     firstName,
@@ -428,8 +424,7 @@ exports.update_user_info = async (req, res) => {
   } = req.body;
 
   try {
-    // find user and update his info
-    const updateUserInfo = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       user_id,
       {
         $set: {
@@ -444,19 +439,18 @@ exports.update_user_info = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updateUserInfo);
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.update_user_image = async (req, res) => {
+exports.update_profile_image = async (req, res) => {
   const { user_id, imageUrl } = req.body;
 
   try {
     if (!imageUrl) {
-      // find user and set his profile image to an empty array
-      const emptyUserImage = await User.findByIdAndUpdate(
+      const updatedUserEmptyProfileImage = await User.findByIdAndUpdate(
         user_id,
         {
           $set: {
@@ -469,14 +463,14 @@ exports.update_user_image = async (req, res) => {
         { new: true }
       );
 
-      res.status(200).json(emptyUserImage);
-    } else {
+      res.status(200).json(updatedUserEmptyProfileImage);
+    }
+    if (imageUrl) {
       const result = await cloudinary.uploader.upload(imageUrl, {
         folder: "profile_images",
       });
 
-      // find user and update his profileImage field
-      const updateUserImg = await User.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         user_id,
         {
           $set: {
@@ -488,7 +482,7 @@ exports.update_user_image = async (req, res) => {
         },
         { new: true }
       );
-      res.status(200).json(updateUserImg);
+      res.status(200).json(updatedUser);
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -500,8 +494,7 @@ exports.update_user_cover_image = async (req, res) => {
 
   try {
     if (!imageUrl) {
-      // find user and set his cover image to an empty array
-      const emtpyCoverImage = await User.findByIdAndUpdate(
+      const updatedUserEmptyCoverImage = await User.findByIdAndUpdate(
         user_id,
         {
           $set: {
@@ -514,14 +507,15 @@ exports.update_user_cover_image = async (req, res) => {
         { new: true }
       );
 
-      res.status(200).json(emtpyCoverImage);
-    } else {
+      res.status(200).json(updatedUserEmptyCoverImage);
+    }
+
+    if (imageUrl) {
       const result = await cloudinary.uploader.upload(imageUrl, {
         folder: "profile_cover_images",
       });
 
-      // find user and update his coverImage field
-      const updateUserImg = await User.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         user_id,
         {
           $set: {
@@ -533,7 +527,7 @@ exports.update_user_cover_image = async (req, res) => {
         },
         { new: true }
       );
-      res.status(200).json(updateUserImg);
+      res.status(200).json(updatedUser);
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../hooks/useContext/useAuthContext";
+import { usePostContext } from "../hooks/useContext/usePostContext";
 
 // images
 import odinBookLogo from "../assets/images/odin-book.jpeg";
@@ -15,16 +15,17 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 // components
 import NavMenu from "./NavMenu";
 
-const Navbar = ({ setIsAddPostActive }) => {
+const Navbar = () => {
   const [isNavMenu, setIsNavMenu] = useState(false);
   const { user } = useAuthContext();
+  const { dispatch } = usePostContext();
 
   if (!user) {
     return null;
   }
 
   return (
-    <nav className="fixed z-10 flex h-[72px] w-full items-center justify-between border-b-[1.5px] border-zinc-200 bg-white px-6">
+    <nav className="fixed z-50 flex h-[72px] w-full items-center justify-between border-b-[1.5px] border-zinc-200 bg-white px-6">
       <Link to="/homepage" className="flex items-center gap-2">
         <div className="h-12 w-12 ">
           <img
@@ -44,14 +45,17 @@ const Navbar = ({ setIsAddPostActive }) => {
           <FaHome className="text-3xl text-mainBlue" />
           <h3 className="text-sm"> Home</h3>
         </NavLink>
-        <NavLink to="/friends" className="flex w-28 flex-col items-center pt-3">
+        <NavLink
+          to="/friends/"
+          className="flex w-28 flex-col items-center pt-3"
+        >
           <FaUserFriends className="text-3xl text-mainBlue" />
           <h3 className="text-sm"> Friends</h3>
         </NavLink>
         <div
           className="flex w-28 cursor-pointer flex-col items-center pt-3"
           onClick={() => {
-            setIsAddPostActive(true);
+            dispatch({ type: "ADD_POST" });
           }}
         >
           <MdAddCircle className="text-3xl text-mainBlue" />
@@ -64,7 +68,7 @@ const Navbar = ({ setIsAddPostActive }) => {
           {user && (
             <img
               src={user.profileImg.url ? user.profileImg.url : defaultProfile}
-              alt="User Image"
+              alt="profile"
               className="h-full w-full cursor-pointer rounded-full"
             />
           )}
@@ -77,7 +81,7 @@ const Navbar = ({ setIsAddPostActive }) => {
           onClick={() => setIsNavMenu(!isNavMenu)}
         />
 
-        {isNavMenu && <NavMenu user={user} />}
+        {isNavMenu && <NavMenu user={user} setIsNavMenu={setIsNavMenu} />}
       </div>
     </nav>
   );
