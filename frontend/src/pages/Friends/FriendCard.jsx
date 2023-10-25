@@ -18,7 +18,7 @@ const FriendCard = ({
   }
 
   return (
-    <div className="flex w-[230px] flex-col items-center rounded-xl border-[1px] border-zinc-200 bg-white shadow-lg">
+    <article className="flex w-[230px] flex-col items-center rounded-xl border-[1px] border-zinc-200 bg-white shadow-lg">
       <img
         src={profile_image ? profile_image : defaultProfile}
         alt="Profile"
@@ -38,7 +38,7 @@ const FriendCard = ({
       >
         View Profile
       </Link>
-    </div>
+    </article>
   );
 };
 

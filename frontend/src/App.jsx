@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useContext/useAuthContext";
+import { usePostContext } from "./hooks/useContext/usePostContext";
 
 // components
 import Login from "./pages/Auth/Login";
@@ -16,14 +17,26 @@ import Friends from "./pages/Friends/Friends";
 import FriendsRequests from "./pages/Friends/FriendsRequests";
 import FriendsList from "./pages/Friends/FriendsList";
 
+import Overlay from "./components/Overlay";
+import AddPost from "./components/AddPost";
+
 const App = () => {
   const { user, authIsReady } = useAuthContext();
+  const { isAddPost } = usePostContext();
 
   return (
     <>
       {authIsReady && (
         <BrowserRouter>
           <Navbar />
+
+          {isAddPost && (
+            <>
+              <Overlay />
+              <AddPost />
+            </>
+          )}
+
           <Routes>
             <Route
               path="/"

@@ -23,7 +23,7 @@ const SentFriendsRequestCard = ({
     return <LoadingFriendCard />;
   }
   return (
-    <div className="flex w-[230px] flex-col items-center rounded-xl border-[1px] border-zinc-200 bg-white shadow-lg">
+    <article className="flex w-[230px] flex-col items-center rounded-xl border-[1px] border-zinc-200 bg-white shadow-lg">
       <img
         src={profile_image ? profile_image : defaultProfile}
         alt="Profile"
@@ -53,7 +53,7 @@ const SentFriendsRequestCard = ({
       )}
 
       {error && <Error error={error} />}
-    </div>
+    </article>
   );
 };
 

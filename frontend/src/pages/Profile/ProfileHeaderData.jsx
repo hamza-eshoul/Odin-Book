@@ -27,24 +27,24 @@ const ProfileHeaderData = ({ profile, setProfile }) => {
         </>
       )}
 
-      <section className="absolute -bottom-[145px] left-10 flex w-[95%] flex-col gap-6">
-        <div className="flex items-end gap-2">
+      <section className="absolute -bottom-[244px] flex w-full flex-col gap-6 xmd:-bottom-[145px] xmd:left-10 xmd:w-[95%]">
+        <div className="flex flex-col items-center gap-2 xmd:flex-row xmd:items-end">
           <ProfileHeaderProfileImage
             profile={profile}
             setProfile={setProfile}
           />
 
-          <div className="flex w-[85%] items-center justify-between">
+          <div className="flex w-[85%] flex-col items-center justify-between gap-4 xmd:flex-row xmd:gap-0">
             {profile && (
-              <h2 className="text-3xl font-semibold">
+              <span className="text-2xl font-semibold xmd:text-3xl">
                 {" "}
                 {profile.firstName} {profile.lastName}{" "}
-              </h2>
+              </span>
             )}
 
             {user && profile && user._id == profile._id && (
               <button
-                className="flex items-center gap-2 rounded-md bg-zinc-300/50 px-4 py-1.5 font-semibold hover:bg-zinc-300/80"
+                className="flex items-center gap-2 rounded-md bg-zinc-300/50 px-2 py-1 font-semibold hover:bg-zinc-300/80 xmd:px-4 xmd:py-1.5"
                 onClick={() => {
                   setIsUpdateProfileData(true);
                 }}

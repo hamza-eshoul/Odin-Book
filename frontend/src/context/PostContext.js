@@ -29,6 +29,11 @@ export const postsReducer = (state, action) => {
         ...state,
         posts: state.posts.filter((post) => post._id !== action.payload._id),
       };
+    case "RESET_POSTS":
+      return {
+        ...state,
+        posts: null,
+      };
 
     default:
       return state;

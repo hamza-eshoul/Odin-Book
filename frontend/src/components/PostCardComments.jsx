@@ -23,7 +23,7 @@ const PostCardComments = ({ user, post_id, showComments, setCommentsNbr }) => {
   }
 
   return (
-    <section className="px-6">
+    <div className="px-6">
       <AddPostCardComment
         user={user}
         post_id={post_id}
@@ -58,7 +58,7 @@ const PostCardComments = ({ user, post_id, showComments, setCommentsNbr }) => {
             />
           ))}
       </div>
-    </section>
+    </div>
   );
 };
 

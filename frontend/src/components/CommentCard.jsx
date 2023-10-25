@@ -66,13 +66,11 @@ const CommentCard = ({
 
   return (
     <div className="flex items-center gap-3">
-      <div className="mb-4 h-10 w-10">
-        <img
-          src={author.profileImg.url ? author.profileImg.url : defaultProfile}
-          className="object-fit h-full w-full rounded-full"
-          alt="profile"
-        />
-      </div>
+      <img
+        src={author.profileImg.url ? author.profileImg.url : defaultProfile}
+        className="object-fit mb-4 h-10 w-10 rounded-full"
+        alt="profile"
+      />
 
       <div className="flex flex-col gap-2">
         {" "}
@@ -80,11 +78,14 @@ const CommentCard = ({
           <div className="flex gap-6">
             <Link
               className="cursor-pointer font-semibold hover:underline"
+              reloadDocument
               to={`/profile/${author._id}/`}
             >
               {author.firstName} {author.lastName}
             </Link>
-            <p className="text-sm text-black/60">{formattedCommentDate} </p>
+            <time className="text-sm text-black/60">
+              {formattedCommentDate}{" "}
+            </time>
           </div>
 
           {isUpdateComment && (

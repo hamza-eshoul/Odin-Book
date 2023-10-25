@@ -30,10 +30,10 @@ const NavMenu = ({ user, setIsNavMenu }) => {
     }
   };
   return (
-    <ul className="absolute right-3.5 top-14 flex w-32 flex-col rounded-md border-[0.5px] bg-white p-1.5 shadow-sm">
+    <ul className="xsm:top-14 xsm:text-base absolute right-3.5 top-[68px] flex w-32 flex-col rounded-md border-[0.5px] bg-white p-1.5 text-sm shadow-sm">
       {" "}
       <li
-        className="cursor-pointer border-b-[1px] px-2.5 py-1.5 transition duration-300 hover:bg-[#f8fafd]"
+        className="cursor-pointer border-b-[1px] px-1 py-1.5 transition duration-300 hover:bg-[#f8fafd] sm:px-2.5"
         onClick={() => {
           dynamicallyNavigateToProfile();
           setIsNavMenu(false);
@@ -43,7 +43,7 @@ const NavMenu = ({ user, setIsNavMenu }) => {
         View Profile
       </li>
       <li
-        className="cursor-pointer border-b-[1px] px-2.5 py-1.5 transition duration-300 hover:bg-[#f8fafd]"
+        className="cursor-pointer border-b-[1px] px-1 py-1.5 transition duration-300 hover:bg-[#f8fafd] sm:px-2.5"
         onClick={toggleToastNotification}
       >
         {" "}
@@ -56,7 +56,7 @@ const NavMenu = ({ user, setIsNavMenu }) => {
           setIsNavMenu(false);
         }}
       >
-        <li className="cursor-pointer px-2.5 py-1.5  transition duration-300 hover:bg-[#f8fafd]">
+        <li className="cursor-pointer px-1 py-1.5 transition  duration-300 hover:bg-[#f8fafd] sm:px-2.5">
           {" "}
           Log out
         </li>

@@ -18,24 +18,20 @@ const ProfileFriendCard = ({
   };
 
   return (
-    <div
+    <article
       className={`flex cursor-pointer ${
         isRowCard ? "flex-row gap-6" : "flex-col gap-2"
       } items-center`}
     >
-      <div
-        className="h-24 w-24 hover:opacity-90"
+      <img
+        src={profileImg ? profileImg : defaultProfile}
+        className="h-24 w-24 rounded-lg object-cover hover:opacity-90"
         onClick={() => {
           navigateToFriendProfile();
         }}
-      >
-        <img
-          src={profileImg ? profileImg : defaultProfile}
-          className="h-full w-full rounded-lg object-cover"
-        />
-      </div>
+      />
 
-      <h3
+      <span
         className={`text-center ${
           isRowCard ? "text-[17px]" : "text-sm"
         } font-medium hover:underline`}
@@ -44,8 +40,8 @@ const ProfileFriendCard = ({
         }}
       >
         {firstName} {lastName}{" "}
-      </h3>
-    </div>
+      </span>
+    </article>
   );
 };
 

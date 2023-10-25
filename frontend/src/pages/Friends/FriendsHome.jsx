@@ -21,10 +21,12 @@ const FriendsHome = () => {
   const { nonFriendsList, isPending, error } = useFetchnNonFriends();
 
   return (
-    <div className="w-4/5 bg-[#fbfcfe] px-14 py-10">
-      <h1 className="pb-4 text-2xl font-semibold">Find new friends</h1>
+    <section className="mx-auto max-w-4xl bg-[#fbfcfe] px-4 py-10 lg:w-[65%] lg:max-w-none">
+      <h1 className="pb-4 text-center text-2xl font-semibold lg:text-start">
+        Find new friends
+      </h1>
 
-      <div className=" flex flex-wrap gap-5">
+      <div className="mb-[70px] flex flex-wrap justify-center gap-5 lg:justify-start">
         {isPending &&
           pending_friends_cards.map((card) => (
             <NonFriendCard key={card.id} isCardLoading={true} />
@@ -44,12 +46,12 @@ const FriendsHome = () => {
           ))}
 
         {!isPending && nonFriendsList && nonFriendsList.length == 0 && (
-          <h3 className="text-[17px]"> No friends to add </h3>
+          <p className="text-[17px]"> No friends to add </p>
         )}
 
         {error && <Error error={error} />}
       </div>
-    </div>
+    </section>
   );
 };
 

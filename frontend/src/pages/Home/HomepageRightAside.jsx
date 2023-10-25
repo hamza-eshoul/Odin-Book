@@ -6,7 +6,7 @@ import HomepageAsideCard from "./HomepageAsideCard";
 
 const HomepageRightAside = () => {
   return (
-    <section className="flex w-[30%] flex-col items-center gap-6">
+    <aside className="hidden w-[35%] flex-col items-center gap-6 xmd:flex lg:w-[30%]">
       <HomepageAsideCard title={"Find Your Friends"}>
         <Search />
       </HomepageAsideCard>
@@ -16,7 +16,7 @@ const HomepageRightAside = () => {
       </HomepageAsideCard>
 
       <LatestPost />
-    </section>
+    </aside>
   );
 };
 

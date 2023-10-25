@@ -40,29 +40,25 @@ const SuggestedFriends = () => {
       {!isPending &&
         shuffledAndSlicedNonFriendsList &&
         shuffledAndSlicedNonFriendsList.map((non_friend) => (
-          <li>
+          <li key={non_friend._id}>
             <Link
               to={`/profile/${non_friend._id}/`}
               key={non_friend._id}
               className="flex cursor-pointer items-center gap-3 rounded p-2.5 hover:bg-zinc-100/60"
             >
-              <div className="h-12 w-12">
-                <img
-                  src={
-                    non_friend.profileImg.url
-                      ? non_friend.profileImg.url
-                      : defaultProfile
-                  }
-                  alt="non friend profile"
-                  className="h-full w-full rounded-full"
-                />
-              </div>
+              <img
+                src={
+                  non_friend.profileImg.url
+                    ? non_friend.profileImg.url
+                    : defaultProfile
+                }
+                alt="non friend profile"
+                className="h-12 w-12 rounded-full"
+              />
 
-              <div className="flex flex-col gap-1">
-                <span className="font-medium opacity-75">
-                  {non_friend.firstName} {non_friend.lastName}
-                </span>
-              </div>
+              <span className="font-medium opacity-75">
+                {non_friend.firstName} {non_friend.lastName}
+              </span>
             </Link>
           </li>
         ))}

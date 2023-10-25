@@ -13,7 +13,7 @@ const HomepageBody = () => {
   const { posts } = usePostContext();
 
   return (
-    <section className="flex w-[40%] flex-col gap-3">
+    <section className="xmd:w-[65%] mx-auto flex w-full flex-col gap-3 sm:w-[80%] lg:w-[40%]">
       <AddPostCard />
       {isPending &&
         pending_posts.map((pending_post) => (

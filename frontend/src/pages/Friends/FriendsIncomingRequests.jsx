@@ -17,10 +17,12 @@ const FriendsIncomingRequests = () => {
     useFetchIncomingFriendsRequests();
 
   return (
-    <div className="border-b-[1px] border-zinc-400/30 pb-10">
-      <h1 className="pb-4 text-2xl font-semibold">Incoming Requests</h1>
+    <section className="border-b-[1px] border-zinc-400/30 pb-10">
+      <h1 className="pb-4 text-center text-2xl font-semibold lg:text-start">
+        Incoming Requests
+      </h1>
 
-      <div className="flex flex-wrap gap-5">
+      <div className="mb-[70px] flex flex-wrap justify-center gap-5 lg:justify-start">
         {isPending &&
           pending_requests_cards.map((card) => (
             <IncomingFriendRequestCard key={card.id} isCardLoading={true} />
@@ -42,11 +44,11 @@ const FriendsIncomingRequests = () => {
         {!isPending &&
           incomingFriendsRequests &&
           incomingFriendsRequests.length == 0 && (
-            <h2 className="text-[17px]"> No Incoming Requests</h2>
+            <span className="text-[17px]"> No Incoming Requests</span>
           )}
         {error && <Error error={error} />}
       </div>
-    </div>
+    </section>
   );
 };
 

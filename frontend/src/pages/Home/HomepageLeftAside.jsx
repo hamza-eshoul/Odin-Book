@@ -17,9 +17,15 @@ import HomepageAsideCard from "./HomepageAsideCard";
 import Toast from "../../components/Toast";
 
 const aside_card_items = [
-  { title: "Marketplace", icon: <SiHomeassistantcommunitystore /> },
-  { title: "Ads Manager", icon: <VscGraph /> },
-  { title: "Groups", icon: <HiUserGroup /> },
+  {
+    title: "Marketplace",
+    icon: <SiHomeassistantcommunitystore className="text-2xl text-zinc-500" />,
+  },
+  {
+    title: "Ads Manager",
+    icon: <VscGraph className="text-2xl text-zinc-500" />,
+  },
+  { title: "Groups", icon: <HiUserGroup className="text-2xl text-zinc-500" /> },
 ];
 
 const HomepageLeftAside = () => {
@@ -35,7 +41,7 @@ const HomepageLeftAside = () => {
   };
 
   return (
-    <section className="flex w-[25%] flex-col items-center">
+    <aside className="hidden w-[25%] flex-col items-center lg:flex ">
       <HomepageAsideCard>
         <div className="flex cursor-pointer gap-3 rounded p-2 hover:bg-zinc-100/50">
           <div className="relative h-12 w-12 ">
@@ -69,10 +75,7 @@ const HomepageLeftAside = () => {
               className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
               to={`/profile/${user._id}/`}
             >
-              {" "}
-              <div className="text-2xl text-zinc-500">
-                <CgProfile />
-              </div>
+              <CgProfile className="text-2xl text-zinc-500" />
               <span className="text-[17px] font-light">Profile</span>
             </Link>
           </li>
@@ -81,10 +84,7 @@ const HomepageLeftAside = () => {
               className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
               to="/friends/"
             >
-              <div className="text-2xl text-zinc-500">
-                <FaUserFriends />
-              </div>
-
+              <FaUserFriends className="text-2xl text-zinc-500 " />
               <span className="text-[17px] font-light">Friends</span>
             </Link>
           </li>
@@ -95,7 +95,7 @@ const HomepageLeftAside = () => {
               className="flex cursor-pointer items-center gap-4 rounded p-3 hover:bg-zinc-100/60"
               onClick={toggleToastNotification}
             >
-              <div className="text-2xl text-zinc-500">{item.icon}</div>
+              {item.icon}
 
               <span className="text-[17px] font-light">{item.title}</span>
             </li>
@@ -111,7 +111,7 @@ const HomepageLeftAside = () => {
           setToastNotification={setToastNotification}
         />
       )}
-    </section>
+    </aside>
   );
 };
 

@@ -5,8 +5,6 @@ import { usePostContext } from "../../hooks/useContext/usePostContext";
 // components
 import PostCard from "../../components/PostCard";
 import AddPostCard from "../../components/AddPostCard";
-import Overlay from "../../components/Overlay";
-import AddPost from "../../components/AddPost";
 import Error from "../../components/Error";
 
 const pending_profile_posts = [
@@ -20,19 +18,13 @@ const pending_profile_posts = [
 const ProfilePosts = ({ profile_id }) => {
   const { isPending, error } = useFetchProfilePosts(profile_id);
   const { user } = useAuthContext();
-  const { posts, isAddPost } = usePostContext();
+  const { posts } = usePostContext();
 
   return (
-    <div className="mt-6 flex w-2/3 flex-col gap-4">
-      {isAddPost && (
-        <>
-          <Overlay />
-          <AddPost />
-        </>
-      )}
-      <div className="rounded-md border-[1px] border-zinc-200 bg-white px-6 py-2.5 shadow-sm">
-        <h3 className="text-2xl font-semibold"> Posts </h3>
-      </div>
+    <section className="mt-6 flex w-full flex-col gap-4 xmd:w-2/3">
+      <header className="rounded-md border-[1px] border-zinc-200 bg-white px-6 py-2.5 shadow-sm">
+        <h2 className="text-2xl font-semibold"> Posts </h2>
+      </header>
       {user._id == profile_id && <AddPostCard />}
       {isPending &&
         pending_profile_posts.map((pending_post) => (
@@ -60,7 +52,7 @@ const ProfilePosts = ({ profile_id }) => {
         </div>
       )}
       {error && <Error error={error} />}
-    </div>
+    </section>
   );
 };
 

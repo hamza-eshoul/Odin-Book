@@ -9,6 +9,7 @@ export const useFetchRecentPosts = () => {
   const fetchRecentPosts = async () => {
     setIsPending(true);
     setError(null);
+    dispatch({ type: "RESET_POSTS" });
 
     const response = await fetch("http://localhost:4000/posts");
 

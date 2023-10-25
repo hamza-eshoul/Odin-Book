@@ -24,7 +24,7 @@ const Profile = () => {
   }
 
   return (
-    <section className="min-h-screen bg-[#fbfcfe] pb-20 pt-16">
+    <main className="min-h-screen bg-[#fbfcfe] pb-20 pt-16">
       <ProfileHeader profile={profile} setProfile={setProfile} />
 
       <Outlet
@@ -32,7 +32,7 @@ const Profile = () => {
           profile,
         }}
       />
-    </section>
+    </main>
   );
 };
 

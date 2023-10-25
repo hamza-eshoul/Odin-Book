@@ -23,10 +23,12 @@ const FriendsList = () => {
   const { friendsList, isPending, error } = useFetchFriends(user._id);
 
   return (
-    <div className="w-4/5 bg-[#fbfcfe] px-14 py-10 ">
-      <h1 className="pb-4 text-2xl font-semibold">Friends</h1>
+    <section className="mx-auto max-w-4xl bg-[#fbfcfe] px-4 py-10 lg:w-[65%] lg:max-w-none">
+      <h1 className="pb-4 text-center text-2xl font-semibold lg:text-start">
+        Friends List
+      </h1>
 
-      <div className="flex flex-wrap gap-5">
+      <div className="mb-[70px] flex flex-wrap justify-center gap-5 lg:justify-start">
         {isPending &&
           pending_friends_cards.map((card) => (
             <FriendCard key={card.id} isCardLoading={true} />
@@ -46,11 +48,11 @@ const FriendsList = () => {
           ))}
 
         {!isPending && friendsList && friendsList.length == 0 && (
-          <h2 className="text-[17px]"> No friends yet</h2>
+          <span className="text-[17px]"> No friends yet</span>
         )}
         {error && <Error error={error} />}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,23 +1,11 @@
-import { usePostContext } from "../../hooks/useContext/usePostContext";
-
 // components
-import AddPost from "../../components/AddPost";
-import Overlay from "../../components/Overlay";
 import HomepageRightAside from "./HomepageRightAside";
 import HomepageLeftAside from "./HomepageLeftAside";
 import HomepageBody from "./HomepageBody";
 
 const Homepage = () => {
-  const { isAddPost } = usePostContext();
   return (
-    <main className="mx-auto flex w-[75%] gap-6 bg-[#fbfcfe] py-24">
-      {isAddPost && (
-        <>
-          <Overlay />
-          <AddPost />
-        </>
-      )}
-
+    <main className="mx-auto flex max-w-7xl gap-6 bg-[#fbfcfe] px-4 py-24">
       <HomepageLeftAside />
 
       <HomepageBody />

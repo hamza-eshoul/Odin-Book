@@ -33,17 +33,16 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <section className="w-[35%]">
-        <div className="flex h-full flex-col items-center justify-center gap-3 px-28">
-          <img src={logo} className="h-32 w-32" />
-
-          <div className="space-y-2 text-center">
+    <main className="flex h-screen bg-[#fbfcfe] lg:bg-white">
+      <section className="flex w-full items-center justify-center lg:w-[45%] xl:w-[35%]">
+        <div className="mx-auto flex w-[440px] flex-col items-center justify-center gap-3 rounded-md bg-white p-8 shadow-md  lg:shadow-none">
+          <header className="flex flex-col items-center gap-2 text-center">
+            <img src={logo} className="h-32 w-32" />
             <h1 className="text-3xl font-semibold text-darkBlue">Login</h1>
             <h2 className="text-darkblue text-lg opacity-50">
               To meet the world.{" "}
             </h2>
-          </div>
+          </header>
 
           <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
             <label className="auth_label">
@@ -121,8 +120,8 @@ const Login = () => {
           </p>
         </div>
       </section>
-      <img src={auth_image} className="w-[65%]" />{" "}
-    </div>
+      <img src={auth_image} className="hidden w-[55%] lg:block xl:w-[65%]" />{" "}
+    </main>
   );
 };
 

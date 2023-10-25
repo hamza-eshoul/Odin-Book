@@ -34,20 +34,14 @@ const PostCard = ({ author, content, image, date, post_id, isPostLoading }) => {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-md border-[0.4px] border-zinc-100 bg-white py-3 shadow">
+    <article className="flex flex-col gap-4 rounded-md border-[0.4px] border-zinc-100 bg-white py-3 shadow">
       <header className="relative flex w-full items-center justify-between px-6">
         <div className="flex gap-3">
-          <div className="flex items-center justify-center">
-            <div className="h-12 w-12">
-              <img
-                src={
-                  author.profileImg.url ? author.profileImg.url : defaultProfile
-                }
-                alt="Profile"
-                className="h-full w-full cursor-pointer rounded-full"
-              />
-            </div>
-          </div>
+          <img
+            src={author.profileImg.url ? author.profileImg.url : defaultProfile}
+            alt="Profile"
+            className="h-12 w-12 cursor-pointer rounded-full"
+          />
 
           <div className="flex flex-col">
             {" "}
@@ -57,10 +51,10 @@ const PostCard = ({ author, content, image, date, post_id, isPostLoading }) => {
             >
               {author.firstName} {author.lastName}
             </Link>
-            <p className="text-sm font-light text-zinc-600 ">
+            <time className="text-sm font-light text-zinc-600 ">
               {" "}
               {formattedPostDate}
-            </p>{" "}
+            </time>{" "}
           </div>
         </div>
 
@@ -74,24 +68,26 @@ const PostCard = ({ author, content, image, date, post_id, isPostLoading }) => {
           <DeletePost setIsDeletePost={setIsDeletePost} post_id={post_id} />
         )}
       </header>
-      <div className="px-6">{content}</div>
+      <p className="px-6">{content}</p>
+
       {image && (
         <div className="h-[380px] w-full">
           <img src={image} className="h-full w-full" alt="post" />
         </div>
       )}
+
       <div className="flex justify-between px-6 text-slate-600">
-        <div className="flex items-center gap-2">
+        <div className="flex cursor-pointer gap-1.5">
           <FcLike className="text-2xl " />
-          <span> {postLikesNbr} </span>
+          {postLikesNbr}
         </div>
-        <p
+        <span
           className="cursor-pointer"
           onClick={() => setShowComments(!showComments)}
         >
           {" "}
           {commentsNbr} comments{" "}
-        </p>
+        </span>
       </div>
 
       <div className="flex border-t-[1px] border-slate-200 px-6 pt-2">
@@ -136,7 +132,7 @@ const PostCard = ({ author, content, image, date, post_id, isPostLoading }) => {
         showComments={showComments}
         setCommentsNbr={setCommentsNbr}
       />
-    </section>
+    </article>
   );
 };
 

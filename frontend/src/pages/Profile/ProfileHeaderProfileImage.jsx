@@ -27,18 +27,7 @@ const ProfileHeaderProfileImage = ({ profile, setProfile }) => {
         </>
       )}
 
-      {user && profile && user._id == profile._id && (
-        <div
-          className="absolute left-[130px] top-[130px] z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-zinc-100 hover:bg-zinc-200"
-          onClick={() => {
-            setIsUpdateProfileImage(true);
-          }}
-        >
-          <BsFillCameraFill className="text-2xl" />
-        </div>
-      )}
-
-      <div className="relative h-44 w-44">
+      <div className="relative h-40 w-40 xmd:h-44 xmd:w-44">
         {profile && profile.profileImg.url && (
           <img
             src={profile.profileImg.url}
@@ -53,6 +42,16 @@ const ProfileHeaderProfileImage = ({ profile, setProfile }) => {
             alt="profile image"
             className="h-full w-full rounded-full bg-white p-1.5"
           />
+        )}
+        {user && profile && user._id == profile._id && (
+          <div
+            className="absolute left-[115px] top-[115px] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-zinc-100 hover:bg-zinc-200 xmd:left-[130px] xmd:top-[130px] xmd:h-10 xmd:w-10"
+            onClick={() => {
+              setIsUpdateProfileImage(true);
+            }}
+          >
+            <BsFillCameraFill className="text-xl xmd:text-2xl" />
+          </div>
         )}
       </div>
     </>

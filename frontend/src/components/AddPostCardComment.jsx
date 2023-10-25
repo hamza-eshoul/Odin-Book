@@ -29,20 +29,18 @@ const AddPostCardComment = ({
   };
 
   const updatePostState = (addedComment) => {
-    setPostComments((prevPostComments) => [addedComment, ...prevPostComments]);
+    setPostComments((prevPostComments) => [...prevPostComments, addedComment]);
     setCommentsNbr((prevCommentNbr) => prevCommentNbr + 1);
     setCommentContent("");
   };
 
   return (
     <form className="flex gap-3" onSubmit={handleSubmit}>
-      <div className="h-10 w-10">
-        <img
-          src={user.profileImg.url ? user.profileImg.url : defaultProfile}
-          alt="Profile"
-          className="object-fit h-full w-full rounded-full"
-        />
-      </div>
+      <img
+        src={user.profileImg.url ? user.profileImg.url : defaultProfile}
+        alt="Profile"
+        className="object-fit h-10 w-10 rounded-full"
+      />
 
       <div className="flex w-full flex-col gap-3">
         <textarea
@@ -55,7 +53,7 @@ const AddPostCardComment = ({
         />
         {commentContent.length > 0 && (
           <button className="w-20 rounded bg-blue-600 px-1 py-1 text-sm font-semibold text-white transition duration-300 hover:bg-blue-500">
-            {isPending ? <p> Posting ...</p> : <p> Post </p>}
+            {isPending ? <span> Posting ...</span> : <span> Post </span>}
           </button>
         )}
         {error && <Error error={error} />}

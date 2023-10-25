@@ -2,32 +2,32 @@ import { NavLink } from "react-router-dom";
 
 const ProfileHeaderNav = ({ profile }) => {
   return (
-    <nav>
+    <>
       {profile && (
-        <ul className="flex gap-3 border-t-[1px] border-zinc-200 text-lg font-medium text-zinc-700">
+        <div className="flex justify-center gap-3 border-t-[1px] border-zinc-200 font-medium text-zinc-700 xmd:justify-normal xmd:text-lg">
           <NavLink
             to={`/profile/${profile._id}/`}
             className={({ isActive }) =>
               isActive
-                ? "flex items-center rounded-sm border-b-2 border-blue-700 bg-zinc-100/60 px-3.5 py-2 text-center font-semibold "
-                : "px-3.5 py-2.5 hover:bg-zinc-100"
+                ? "flex items-center rounded-sm border-b-2 border-blue-700 bg-zinc-100/60 px-3.5 py-1.5 text-center font-semibold xmd:py-2 "
+                : "px-3.5 py-1.5 hover:bg-zinc-100 xmd:py-2.5"
             }
           >
-            <li className="py-2.5">Home</li>
+            <div className="py-1.5 xmd:py-2.5">Home</div>
           </NavLink>
           <NavLink
             to={`/profile/${profile._id}/friends`}
             className={({ isActive }) =>
               isActive
-                ? "rounded-sm border-b-2 border-blue-700 bg-zinc-100/60 px-3.5 py-2.5 font-semibold "
-                : "px-3.5 py-2.5 hover:bg-zinc-100"
+                ? "rounded-sm border-b-2 border-blue-700 bg-zinc-100/60 px-3.5 py-1.5 font-semibold xmd:py-2.5 "
+                : "px-3.5 py-1.5 hover:bg-zinc-100 xmd:py-2.5"
             }
           >
-            <li className="py-2.5">Friends</li>
+            <div className="py-1.5 xmd:py-2.5">Friends</div>
           </NavLink>
-        </ul>
+        </div>
       )}
-    </nav>
+    </>
   );
 };
 
