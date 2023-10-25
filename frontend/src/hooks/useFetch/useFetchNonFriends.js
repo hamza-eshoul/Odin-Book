@@ -14,6 +14,11 @@ export const useFetchnNonFriends = () => {
 
     const response = await fetch(
       `http://localhost:4000/users/${user._id}/non_friends`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
     );
 
     const json = await response.json();

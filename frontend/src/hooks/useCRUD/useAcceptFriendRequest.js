@@ -18,6 +18,7 @@ export const useAcceptFriendRequest = () => {
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ friend_id }),
@@ -34,7 +35,10 @@ export const useAcceptFriendRequest = () => {
     if (response.ok) {
       setIsPending(false);
       setIsRequestAccepted(true);
-      dispatch({ type: "UPDATE_USER", payload: json });
+      dispatch({
+        type: "UPDATE_USER",
+        payload: { ...json, token: user.token },
+      });
     }
   };
 

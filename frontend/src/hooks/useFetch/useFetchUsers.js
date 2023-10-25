@@ -12,7 +12,11 @@ export const useFetchUsers = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/users");
+    const response = await fetch("http://localhost:4000/users", {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
 
     const json = await response.json();
 

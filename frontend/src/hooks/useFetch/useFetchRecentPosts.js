@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { usePostContext } from "../useContext/usePostContext";
+import { useAuthContext } from "../useContext/useAuthContext";
 
 export const useFetchRecentPosts = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useAuthContext();
   const { dispatch } = usePostContext();
 
   const fetchRecentPosts = async () => {
@@ -11,7 +13,9 @@ export const useFetchRecentPosts = () => {
     setError(null);
     dispatch({ type: "RESET_POSTS" });
 
-    const response = await fetch("http://localhost:4000/posts");
+    const response = await fetch("http://localhost:4000/posts", {
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
 
     const json = await response.json();
 

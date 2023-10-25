@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useAuthContext } from "../useContext/useAuthContext";
 
 export const useFetchPostComments = (post_id) => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [postComments, setPostComments] = useState(null);
+  const { user } = useAuthContext();
 
   const fetchPostComments = async () => {
     setIsPending(true);
@@ -11,6 +13,11 @@ export const useFetchPostComments = (post_id) => {
 
     const response = await fetch(
       `http://localhost:4000/posts/${post_id}/comments`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
     );
 
     const json = await response.json();

@@ -30,7 +30,7 @@ const FriendsSideBar = () => {
 
       <ul className="flex lg:flex-col lg:space-y-3 ">
         {sidebar_items.map((item) => (
-          <li className="w-1/3 cursor-pointer lg:w-full">
+          <li className="w-1/3 cursor-pointer lg:w-full" key={item.title}>
             <NavLink
               to={item.path}
               className={({ isActive }) =>

@@ -16,6 +16,11 @@ export const useFetchIncomingFriendsRequests = () => {
 
     const response = await fetch(
       `http://localhost:4000/users/${user_id}/incoming_friend_requests`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
     );
 
     const json = await response.json();

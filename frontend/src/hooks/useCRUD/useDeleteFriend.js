@@ -18,6 +18,7 @@ export const useDeleteFriend = () => {
       {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
       },
@@ -33,7 +34,10 @@ export const useDeleteFriend = () => {
     if (response.ok) {
       setIsPending(false);
       setIsFriendDeleted(true);
-      dispatch({ type: "UPDATE_USER", payload: json });
+      dispatch({
+        type: "UPDATE_USER",
+        payload: { ...json, token: user.token },
+      });
     }
   };
 

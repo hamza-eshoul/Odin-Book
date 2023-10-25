@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuthContext } from "../useContext/useAuthContext";
 
 export const useFetchProfile = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
   const [profile, setProfile] = useState(null);
   const location = useLocation();
+  const { user } = useAuthContext();
 
   const user_id = location.pathname.split("/")[2];
 
@@ -13,7 +15,11 @@ export const useFetchProfile = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch(`http://localhost:4000/users/${user_id}`);
+    const response = await fetch(`http://localhost:4000/users/${user_id}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
 
     const json = await response.json();
 

@@ -11,7 +11,11 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
   const user_id = user._id;
 
   const fetchPostLikes = async () => {
-    const response = await fetch(`http://localhost:4000/posts/${post_id}`);
+    const response = await fetch(`http://localhost:4000/posts/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
 
     const json = await response.json();
 
@@ -35,6 +39,7 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
       {
         method: "PUT",
         headers: {
+          Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ user_id }),

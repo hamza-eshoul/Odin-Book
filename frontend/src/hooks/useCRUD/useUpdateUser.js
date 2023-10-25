@@ -4,7 +4,7 @@ import { useAuthContext } from "../useContext/useAuthContext";
 export const useUpdateUser = (update_url) => {
   const [isPending, setIsPending] = useState(null);
   const [error, setError] = useState(null);
-  const { dispatch } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
 
   const updateUser = async (updateData) => {
     setIsPending(true);
@@ -13,7 +13,7 @@ export const useUpdateUser = (update_url) => {
     const response = await fetch(update_url, {
       method: "PUT",
       headers: {
-        // Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${user.token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...updateData }),
@@ -30,8 +30,7 @@ export const useUpdateUser = (update_url) => {
       setIsPending(false);
       dispatch({
         type: "UPDATE_USER",
-        // payload: { ...json, token: user.token },
-        payload: json,
+        payload: { ...json, token: user.token },
       });
       return json;
     }

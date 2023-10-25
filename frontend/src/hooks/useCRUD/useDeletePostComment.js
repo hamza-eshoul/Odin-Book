@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useAuthContext } from "../useContext/useAuthContext";
 
 export const useDeletePostComment = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useAuthContext();
 
   const deletePostComment = async (comment_id) => {
     setIsPending(true);
@@ -13,6 +15,7 @@ export const useDeletePostComment = () => {
       {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
       },

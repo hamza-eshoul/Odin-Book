@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useAuthContext } from "../useContext/useAuthContext";
 
 export const useAddPostComment = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useAuthContext();
 
   const addPostComment = async (author, content, post_id) => {
     setIsPending(true);
@@ -13,6 +15,7 @@ export const useAddPostComment = () => {
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ author, content }),

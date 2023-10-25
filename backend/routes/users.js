@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const requireAuth = require("../middleware/requireAuth");
 
 // #1 Auth
 
@@ -9,6 +10,10 @@ router.post("/signup", userController.sign_up);
 
 // login
 router.post("/login", userController.log_in);
+
+// require auth middleware
+
+router.use(requireAuth);
 
 // #2 User Friends
 
