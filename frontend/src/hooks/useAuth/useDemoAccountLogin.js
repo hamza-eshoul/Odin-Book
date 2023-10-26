@@ -12,16 +12,19 @@ export const useDemoAccountLogin = () => {
     setIsDemoPending(true);
     setDemoError(null);
 
-    const response = await fetch("http://localhost:4000/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://odin-book-api-g5zs.onrender.com/users/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: process.env.REACT_APP_DEMO_EMAIL,
+          password: process.env.REACT_APP_DEMO_PASSWORD,
+        }),
       },
-      body: JSON.stringify({
-        email: process.env.REACT_APP_DEMO_EMAIL,
-        password: process.env.REACT_APP_DEMO_PASSWORD,
-      }),
-    });
+    );
 
     const json = await response.json();
 

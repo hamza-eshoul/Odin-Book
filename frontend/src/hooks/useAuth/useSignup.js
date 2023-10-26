@@ -12,18 +12,21 @@ export const useSignup = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://odin-book-api-g5zs.onrender.com/users/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+        }),
       },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-      }),
-    });
+    );
 
     const json = await response.json();
 

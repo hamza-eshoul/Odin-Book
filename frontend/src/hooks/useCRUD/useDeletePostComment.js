@@ -11,7 +11,7 @@ export const useDeletePostComment = () => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/posts/comments/${comment_id}`,
+      `https://odin-book-api-g5zs.onrender.com/posts/comments/${comment_id}`,
       {
         method: "DELETE",
         headers: {

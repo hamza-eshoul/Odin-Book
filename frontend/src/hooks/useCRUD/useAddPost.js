@@ -12,14 +12,17 @@ export const useAddPost = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch("http://localhost:4000/posts/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://odin-book-api-g5zs.onrender.com/posts/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ author, content, image }),
       },
-      body: JSON.stringify({ author, content, image }),
-    });
+    );
 
     const json = await response.json();
 

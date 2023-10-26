@@ -11,11 +11,14 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
   const user_id = user._id;
 
   const fetchPostLikes = async () => {
-    const response = await fetch(`http://localhost:4000/posts/${post_id}`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
+    const response = await fetch(
+      `https://odin-book-api-g5zs.onrender.com/posts/${post_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       },
-    });
+    );
 
     const json = await response.json();
 
@@ -35,7 +38,7 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/posts/${post_id}/post_likes`,
+      `https://odin-book-api-g5zs.onrender.com/${post_id}/post_likes`,
       {
         method: "PUT",
         headers: {

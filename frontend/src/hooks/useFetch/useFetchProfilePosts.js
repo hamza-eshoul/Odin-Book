@@ -14,7 +14,7 @@ export const useFetchProfilePosts = (profile_id) => {
     dispatch({ type: "RESET_POSTS" });
 
     const response = await fetch(
-      `http://localhost:4000/posts/profile_posts/${profile_id}`,
+      `https://odin-book-api-g5zs.onrender.com/posts/profile_posts/${profile_id}`,
       {
         headers: {
           Authorization: `Bearer ${user.token}`,

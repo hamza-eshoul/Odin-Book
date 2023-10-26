@@ -13,9 +13,12 @@ export const useFetchRecentPosts = () => {
     setError(null);
     dispatch({ type: "RESET_POSTS" });
 
-    const response = await fetch("http://localhost:4000/posts", {
-      headers: { Authorization: `Bearer ${user.token}` },
-    });
+    const response = await fetch(
+      "https://odin-book-api-g5zs.onrender.com/posts",
+      {
+        headers: { Authorization: `Bearer ${user.token}` },
+      },
+    );
 
     const json = await response.json();
 

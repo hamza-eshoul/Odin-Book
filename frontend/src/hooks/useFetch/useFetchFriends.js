@@ -12,7 +12,7 @@ export const useFetchFriends = (user_id) => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/users/${user_id}/friends`,
+      `https://odin-book-api-g5zs.onrender.com/${user_id}/friends`,
       {
         headers: {
           Authorization: `Bearer ${user.token}`,

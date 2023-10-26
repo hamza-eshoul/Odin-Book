@@ -12,7 +12,7 @@ export const useFetchPostComments = (post_id) => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/posts/${post_id}/comments`,
+      `https://odin-book-api-g5zs.onrender.com/posts/${post_id}/comments`,
       {
         headers: {
           Authorization: `Bearer ${user.token}`,

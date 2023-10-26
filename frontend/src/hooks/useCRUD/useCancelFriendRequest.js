@@ -14,7 +14,7 @@ export const useCancelFriendRequest = () => {
     setError(null);
 
     const response = await fetch(
-      `http://localhost:4000/users/${user_id}/cancel_friend_request`,
+      `https://odin-book-api-g5zs.onrender.com/users/${user_id}/cancel_friend_request`,
       {
         method: "POST",
         headers: {

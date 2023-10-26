@@ -12,13 +12,16 @@ export const useDeletePost = () => {
     setIsPending(true);
     setError(null);
 
-    const response = await fetch(`http://localhost:4000/posts/${post_id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://odin-book-api-g5zs.onrender.com/posts/${post_id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     const json = await response.json();
 
