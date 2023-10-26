@@ -38,7 +38,7 @@ export const useFetchAndUpdatePostLikes = (post_id) => {
     setError(null);
 
     const response = await fetch(
-      `https://odin-book-api-g5zs.onrender.com/${post_id}/post_likes`,
+      `https://odin-book-api-g5zs.onrender.com/posts/${post_id}/post_likes`,
       {
         method: "PUT",
         headers: {
