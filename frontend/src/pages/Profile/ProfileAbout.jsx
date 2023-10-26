@@ -24,6 +24,7 @@ const ProfileAbout = ({ profile }) => {
               <div>
                 Studied at
                 <span className="text-[15px] font-semibold">
+                  {" "}
                   {profile.education}
                 </span>
               </div>

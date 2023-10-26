@@ -24,7 +24,7 @@ An intuitive User Interface was built using ReactJS and serves as the project's 
 
 ## Profile Page
 
-![Profile's page Screenshot](/screenshots/Profile-screnshot.png)
+![Profile's page Screenshot](/screenshots/Profile-screenshot.png)
 
 ## Mobile Version
 

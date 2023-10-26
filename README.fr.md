@@ -24,7 +24,7 @@ Une interface utilisateur intuitive a été créé à l'aide de ReactJS et sert 
 
 ## Page de profil
 
-![Profile's page Screenshot](/screenshots/Profile-screnshot.png)
+![Profile's page Screenshot](/screenshots/Profile-screenshot.png)
 
 ## Version Mobile
 
