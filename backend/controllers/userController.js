@@ -125,9 +125,8 @@ exports.get_sent_friend_requests = async (req, res) => {
 };
 
 exports.send_friend_request = async (req, res) => {
+  const { user_id } = req.params;
   const { friend_id } = req.body;
-
-  const user_id = req.user._id;
 
   try {
     const user = await User.findByIdAndUpdate(
@@ -149,9 +148,8 @@ exports.send_friend_request = async (req, res) => {
 };
 
 exports.cancel_friend_request = async (req, res) => {
+  const { user_id } = req.params;
   const { friend_id } = req.body;
-
-  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_sent_requests = user.sent_friends_requests.filter(
@@ -188,9 +186,8 @@ exports.cancel_friend_request = async (req, res) => {
 };
 
 exports.accept_friend_request = async (req, res) => {
+  const { user_id } = req.params;
   const { friend_id } = req.body;
-
-  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
@@ -228,9 +225,8 @@ exports.accept_friend_request = async (req, res) => {
 };
 
 exports.reject_friend_request = async (req, res) => {
+  const { user_id } = req.params;
   const { friend_id } = req.body;
-
-  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
@@ -266,9 +262,7 @@ exports.reject_friend_request = async (req, res) => {
 };
 
 exports.delete_friend = async (req, res) => {
-  const { friend_id } = req.params;
-
-  const user_id = req.user._id;
+  const { user_id, friend_id } = req.params;
 
   const user = await User.findById(user_id);
   const filtered_user_friends_ids = user.friends_ids.filter(

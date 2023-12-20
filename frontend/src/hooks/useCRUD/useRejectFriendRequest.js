@@ -7,12 +7,14 @@ export const useRejectFriendRequest = () => {
   const [isRequestRejected, setIsRequestRejected] = useState(false);
   const { user, dispatch } = useAuthContext();
 
+  const user_id = user._id;
+
   const rejectFriendRequest = async (friend_id) => {
     setIsPending(true);
     setError(null);
 
     const response = await fetch(
-      `https://odin-book-api-g5zs.onrender.com/users/reject_friend_request`,
+      `https://odin-book-api-g5zs.onrender.com/users/${user_id}/reject_friend_request`,
       {
         method: "POST",
         headers: {

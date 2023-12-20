@@ -14,7 +14,7 @@ export const useDeleteFriend = () => {
     setError(null);
 
     const response = await fetch(
-      `https://odin-book-api-g5zs.onrender.com/users/friends/${friend_id}`,
+      `https://odin-book-api-g5zs.onrender.com/users/${user_id}/friends/${friend_id}`,
       {
         method: "DELETE",
         headers: {
