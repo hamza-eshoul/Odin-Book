@@ -127,6 +127,8 @@ exports.get_sent_friend_requests = async (req, res) => {
 exports.send_friend_request = async (req, res) => {
   const { friend_id } = req.body;
 
+  const user_id = req.user._id;
+
   try {
     const user = await User.findByIdAndUpdate(
       user_id,
