@@ -42,10 +42,9 @@ const AddPost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const author = user._id;
     const postImage = imagePreviewSource ? imagePreviewSource : "";
 
-    await addPost(author, postContent, postImage);
+    await addPost(postContent, postImage);
 
     dispatch({ type: "CLOSE_ADD_POST" });
   };

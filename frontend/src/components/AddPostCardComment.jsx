@@ -19,9 +19,7 @@ const AddPostCardComment = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const author = user._id;
-
-    const addedComment = await addPostComment(author, commentContent, post_id);
+    const addedComment = await addPostComment(commentContent, post_id);
 
     if (addedComment) {
       updatePostState(addedComment);

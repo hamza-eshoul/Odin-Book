@@ -20,10 +20,8 @@ const UpdateProfileData = ({ profile, setProfile, setIsUpdateProfileData }) => {
   const [education, setEducation] = useState("");
   const [location, setLocation] = useState("");
 
-  const user_id = profile._id;
-
   const { updateUser, isPending, error } = useUpdateUser(
-    `https://odin-book-api-g5zs.onrender.com/users/${user_id}/profile_data`,
+    `https://odin-book-api-g5zs.onrender.com/users/profile_data`,
   );
 
   useEffect(() => {

@@ -8,7 +8,7 @@ export const useAddPost = () => {
   const { user } = useAuthContext();
   const { dispatch } = usePostContext();
 
-  const addPost = async (author, content, image) => {
+  const addPost = async (content, image) => {
     setIsPending(true);
     setError(null);
 
@@ -20,7 +20,7 @@ export const useAddPost = () => {
           Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ author, content, image }),
+        body: JSON.stringify({ content, image }),
       },
     );
 

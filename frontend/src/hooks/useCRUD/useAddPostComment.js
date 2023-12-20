@@ -6,7 +6,7 @@ export const useAddPostComment = () => {
   const [error, setError] = useState(null);
   const { user } = useAuthContext();
 
-  const addPostComment = async (author, content, post_id) => {
+  const addPostComment = async (content, post_id) => {
     setIsPending(true);
     setError(null);
 
@@ -18,7 +18,7 @@ export const useAddPostComment = () => {
           Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ author, content }),
+        body: JSON.stringify({ content }),
       },
     );
 

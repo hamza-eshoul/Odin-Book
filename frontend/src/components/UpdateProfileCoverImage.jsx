@@ -16,9 +16,8 @@ const UpdateProfileCoverImage = ({
 }) => {
   const [previewSource, setPreviewSource] = useState("");
 
-  const user_id = profile._id;
   const { updateUser, isPending, error } = useUpdateUser(
-    `https://odin-book-api-g5zs.onrender.com/users/${user_id}/profile_cover_image`,
+    `https://odin-book-api-g5zs.onrender.com/users/profile_cover_image`,
   );
 
   useEffect(() => {

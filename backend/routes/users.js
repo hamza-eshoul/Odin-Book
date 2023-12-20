@@ -36,31 +36,19 @@ router.get(
 );
 
 // send friend request
-router.post(
-  "/:user_id/send_friend_request",
-  userController.send_friend_request
-);
+router.post("/send_friend_request", userController.send_friend_request);
 
 // cancel friend request
-router.post(
-  "/:user_id/cancel_friend_request",
-  userController.cancel_friend_request
-);
+router.post("/cancel_friend_request", userController.cancel_friend_request);
 
 // accept friend request
-router.post(
-  "/:user_id/accept_friend_request",
-  userController.accept_friend_request
-);
+router.post("/accept_friend_request", userController.accept_friend_request);
 
 // reject friend request
-router.post(
-  "/user_id/reject_friend_request",
-  userController.reject_friend_request
-);
+router.post("/reject_friend_request", userController.reject_friend_request);
 
 // delete friend
-router.delete("/:user_id/friends/:friend_id", userController.delete_friend);
+router.delete("/friends/:friend_id", userController.delete_friend);
 
 // #3 Users & Profile
 
@@ -71,15 +59,12 @@ router.get("/", userController.get_users);
 router.get("/:user_id", userController.get_user);
 
 // update profile data
-router.put("/:user_id/profile_data", userController.update_profile_data);
+router.put("/profile_data", userController.update_profile_data);
 
 // update profile image
-router.put("/:user_id/profile_image", userController.update_profile_image);
+router.put("/profile_image", userController.update_profile_image);
 
 // update profile cover image
-router.put(
-  "/:user_id/profile_cover_image",
-  userController.update_profile_cover_image
-);
+router.put("/profile_cover_image", userController.update_profile_cover_image);
 
 module.exports = router;

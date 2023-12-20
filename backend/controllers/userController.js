@@ -125,7 +125,6 @@ exports.get_sent_friend_requests = async (req, res) => {
 };
 
 exports.send_friend_request = async (req, res) => {
-  const { user_id } = req.params;
   const { friend_id } = req.body;
 
   try {
@@ -148,8 +147,9 @@ exports.send_friend_request = async (req, res) => {
 };
 
 exports.cancel_friend_request = async (req, res) => {
-  const { user_id } = req.params;
   const { friend_id } = req.body;
+
+  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_sent_requests = user.sent_friends_requests.filter(
@@ -186,8 +186,9 @@ exports.cancel_friend_request = async (req, res) => {
 };
 
 exports.accept_friend_request = async (req, res) => {
-  const { user_id } = req.params;
   const { friend_id } = req.body;
+
+  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
@@ -225,8 +226,9 @@ exports.accept_friend_request = async (req, res) => {
 };
 
 exports.reject_friend_request = async (req, res) => {
-  const { user_id } = req.params;
   const { friend_id } = req.body;
+
+  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_incoming_requests = user.incoming_friends_requests.filter(
@@ -262,7 +264,9 @@ exports.reject_friend_request = async (req, res) => {
 };
 
 exports.delete_friend = async (req, res) => {
-  const { user_id, friend_id } = req.params;
+  const { friend_id } = req.params;
+
+  const user_id = req.user._id;
 
   const user = await User.findById(user_id);
   const filtered_user_friends_ids = user.friends_ids.filter(
@@ -318,9 +322,10 @@ exports.get_user = async (req, res) => {
 };
 
 exports.update_profile_data = async (req, res) => {
-  const { user_id } = req.params;
   const { firstName, lastName, email, occupation, education, location } =
     req.body;
+
+  const user_id = req.user._id;
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -345,8 +350,9 @@ exports.update_profile_data = async (req, res) => {
 };
 
 exports.update_profile_image = async (req, res) => {
-  const { user_id } = req.params;
   const { imageUrl } = req.body;
+
+  const user_id = req.user._id;
 
   try {
     if (!imageUrl) {
@@ -390,8 +396,9 @@ exports.update_profile_image = async (req, res) => {
 };
 
 exports.update_profile_cover_image = async (req, res) => {
-  const { user_id } = req.params;
   const { imageUrl } = req.body;
+
+  const user_id = req.user._id;
 
   try {
     if (!imageUrl) {

@@ -42,7 +42,9 @@ module.exports.get_profile_posts = async (req, res) => {
 };
 
 module.exports.create_post = async (req, res) => {
-  const { author, content, image } = req.body;
+  const { content, image } = req.body;
+
+  const author = req.user._id;
 
   try {
     if (!image) {
@@ -169,7 +171,9 @@ module.exports.fetch_post_comments = async (req, res) => {
 
 module.exports.add_post_comment = async (req, res) => {
   const { post_id } = req.params;
-  const { author, content } = req.body;
+  const { content } = req.body;
+
+  const author = req.user._id;
 
   try {
     const comment = new Comment({
