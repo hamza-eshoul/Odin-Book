@@ -14,6 +14,7 @@ import ProfileHeaderFriendButton from "./ProfileHeaderFriendButton";
 const ProfileHeaderData = ({ profile, setProfile }) => {
   const [isUpdateProfileData, setIsUpdateProfileData] = useState(false);
   const { user } = useAuthContext();
+
   return (
     <>
       {isUpdateProfileData && (
@@ -42,17 +43,20 @@ const ProfileHeaderData = ({ profile, setProfile }) => {
               </span>
             )}
 
-            {user && profile && user._id == profile._id && (
-              <button
-                className="flex items-center gap-2 rounded-md bg-zinc-300/50 px-2 py-1 font-semibold hover:bg-zinc-300/80 xmd:px-4 xmd:py-1.5"
-                onClick={() => {
-                  setIsUpdateProfileData(true);
-                }}
-              >
-                <MdMode className="text-lg" />
-                <span className="pt-0.5">Edit Profile</span>
-              </button>
-            )}
+            {user &&
+              profile &&
+              user._id == profile._id &&
+              profile.firstName + profile.lastName !== "HamzaEshoul" && (
+                <button
+                  className="flex items-center gap-2 rounded-md bg-zinc-300/50 px-2 py-1 font-semibold hover:bg-zinc-300/80 xmd:px-4 xmd:py-1.5"
+                  onClick={() => {
+                    setIsUpdateProfileData(true);
+                  }}
+                >
+                  <MdMode className="text-lg" />
+                  <span className="pt-0.5">Edit Profile</span>
+                </button>
+              )}
 
             {user && profile && user._id !== profile._id && (
               <ProfileHeaderFriendButton profile={profile} user={user} />
